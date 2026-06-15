@@ -1,0 +1,48 @@
+{
+  "total": 14729,
+  "train": 11778,
+  "val": 1468,
+  "test": 1483,
+  "train_label_counts": {
+    "obligation": 3658,
+    "dispute_resolution": 419,
+    "confidentiality": 926,
+    "ip_rights": 461,
+    "definition": 609,
+    "payment": 1510,
+    "liability": 284,
+    "termination": 1794,
+    "data_processing": 104,
+    "penalty": 685,
+    "warranty": 1112,
+    "force_majeure": 216
+  },
+  "val_label_counts": {
+    "confidentiality": 115,
+    "termination": 224,
+    "obligation": 457,
+    "warranty": 139,
+    "payment": 188,
+    "ip_rights": 57,
+    "penalty": 85,
+    "dispute_resolution": 52,
+    "definition": 76,
+    "liability": 35,
+    "force_majeure": 27,
+    "data_processing": 13
+  },
+  "test_label_counts": {
+    "obligation": 458,
+    "confidentiality": 117,
+    "payment": 190,
+    "dispute_resolution": 53,
+    "force_majeure": 28,
+    "penalty": 87,
+    "warranty": 139,
+    "termination": 225,
+    "liability": 37,
+    "ip_rights": 59,
+    "definition": 77,
+    "data_processing": 13
+  }
+}

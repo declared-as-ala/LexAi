@@ -1,0 +1,125 @@
+# VPS first-deploy: builds images locally with production settings
+# Usage: docker compose -f docker-compose.vps-build.yml up --build -d
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: lexai-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-lexai}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-lexai_secure_pass_2025}
+      POSTGRES_DB: ${DB_NAME:-legaltech}
+    volumes:
+      - lexai_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-lexai}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lexai_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: lexai-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lexai_net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lexai-backend
+    image: ghcr.io/declared-as-ala/lexai-backend:latest
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-lexai}:${DB_PASSWORD:-lexai_secure_pass_2025}@db:5432/${DB_NAME:-legaltech}
+      REDIS_URL: redis://redis:6379/0
+      UPLOAD_DIR: /app/uploads
+      MAX_UPLOAD_MB: "50"
+      LOG_LEVEL: INFO
+      DATA_DIR: /app/data
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8001:8000"
+    volumes:
+      - lexai_uploads:/app/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    networks:
+      - lexai_net
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lexai-worker
+    image: ghcr.io/declared-as-ala/lexai-backend:latest
+    command: ["celery", "-A", "app.tasks.celery_app.celery_app", "worker", "--loglevel=info", "--concurrency=2"]
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-lexai}:${DB_PASSWORD:-lexai_secure_pass_2025}@db:5432/${DB_NAME:-legaltech}
+      REDIS_URL: redis://redis:6379/0
+      UPLOAD_DIR: /app/uploads
+      MAX_UPLOAD_MB: "50"
+      LOG_LEVEL: INFO
+      DATA_DIR: /app/data
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    volumes:
+      - lexai_uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - lexai_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # nginx proxies /api/ → backend:8000, so relative URL works for all clients
+        VITE_API_BASE_URL: /api
+    container_name: lexai-frontend
+    image: ghcr.io/declared-as-ala/lexai-frontend:latest
+    depends_on:
+      backend:
+        condition: service_started
+    ports:
+      - "3002:80"
+    restart: unless-stopped
+    networks:
+      - lexai_net
+
+networks:
+  lexai_net:
+    name: lexai_net
+    driver: bridge
+
+volumes:
+  lexai_pgdata:
+    name: lexai_pgdata
+  lexai_uploads:
+    name: lexai_uploads

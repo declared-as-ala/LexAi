@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "framework": "ISO9001",
+    "full_name": "ISO 9001:2015 — Systèmes de management de la qualité — Exigences",
+    "edition": "ISO 9001:2015 (cinquième édition)",
+    "language": "fr",
+    "version": "2015-09-15",
+    "authority": "ISO — Organisation internationale de normalisation",
+    "notes": "Ces règles s'appliquent principalement aux contrats de prestation de services et aux contrats commerciaux. ISO 9001 vise la qualité de la prestation, pas spécifiquement la protection des données. L'application est optionnelle dans le moteur d'évaluation (weight=0.10, applies_when=service_contract_detected)."
+  },
+  "rules": [
+    {
+      "rule_id": "iso9001_sec4_scope",
+      "article": "§ 4.3",
+      "framework": "ISO9001",
+      "title": "Périmètre du système de management qualité non défini",
+      "description": "La section 4.3 de l'ISO 9001:2015 exige que l'organisation détermine le domaine d'application de son SMQ. Pour les contrats de service, il est recommandé que le prestataire précise si sa certification ISO 9001 couvre le service objet du contrat.",
+      "legal_text_fr": "L'organisation doit déterminer le domaine d'application de son système de management de la qualité pour en établir les limites et l'applicabilité.",
+      "trigger_flags": [],
+      "trigger_labels": ["obligation"],
+      "severity": "low",
+      "mandatory": false,
+      "applies_to_contract_types": ["service", "commercial"],
+      "missing_clause_key": null,
+      "remediation_hint": "Préciser si le prestataire est certifié ISO 9001 pour le domaine de prestations couvert par le contrat, et demander copie du certificat valide."
+    },
+    {
+      "rule_id": "iso9001_sec6_sla",
+      "article": "§ 6.2",
+      "framework": "ISO9001",
+      "title": "Objectifs qualité et indicateurs de performance absents",
+      "description": "La section 6.2 de l'ISO 9001:2015 exige la définition d'objectifs qualité mesurables. Le contrat de service devrait définir des indicateurs de performance (SLA : disponibilité, temps de réponse, taux d'erreur) et les conséquences en cas de non-atteinte.",
+      "legal_text_fr": "L'organisation doit établir des objectifs qualité aux fonctions, niveaux et processus concernés. Ces objectifs doivent être mesurables, prendre en compte les exigences applicables, faire l'objet d'une surveillance et être mis à jour selon le besoin.",
+      "trigger_flags": [],
+      "trigger_labels": ["obligation", "warranty"],
+      "severity": "medium",
+      "mandatory": false,
+      "applies_to_contract_types": ["service"],
+      "missing_clause_key": "service_level_agreement",
+      "remediation_hint": "Insérer un SLA (Service Level Agreement) précisant : disponibilité du service (ex: 99,5% uptime), temps de réponse maximal aux incidents, délais de résolution, pénalités de service en cas de non-respect."
+    },
+    {
+      "rule_id": "iso9001_sec8_service_delivery",
+      "article": "§ 8.5",
+      "framework": "ISO9001",
+      "title": "Conditions de réalisation de la prestation non détaillées",
+      "description": "La section 8.5 de l'ISO 9001:2015 couvre la maîtrise de la production et de la prestation de service. Le contrat doit décrire précisément les conditions de réalisation : ressources, méthodes, équipements, et critères d'acceptation.",
+      "legal_text_fr": "L'organisation doit mettre en œuvre la production et la prestation de service dans des conditions maîtrisées, incluant la disponibilité des informations documentées définissant les caractéristiques du produit et le service.",
+      "trigger_flags": [],
+      "trigger_labels": ["obligation", "warranty"],
+      "severity": "low",
+      "mandatory": false,
+      "applies_to_contract_types": ["service"],
+      "missing_clause_key": null,
+      "remediation_hint": "Décrire dans le contrat ou une annexe les conditions de réalisation de la prestation : méthodologie, outils, ressources humaines, critères d'acceptation et procédure de recette."
+    },
+    {
+      "rule_id": "iso9001_sec8_nonconformity",
+      "article": "§ 8.7",
+      "framework": "ISO9001",
+      "title": "Gestion des non-conformités et réclamations non prévue",
+      "description": "La section 8.7 de l'ISO 9001:2015 impose la maîtrise des éléments de sortie non conformes. Le contrat doit définir la procédure de traitement des défauts, des réclamations et des non-conformités de la prestation.",
+      "legal_text_fr": "L'organisation doit s'assurer que les éléments de sortie qui ne sont pas conformes aux exigences applicables sont identifiés et maîtrisés afin d'empêcher leur utilisation ou fourniture non intentionnelle.",
+      "trigger_flags": [],
+      "trigger_labels": ["warranty", "penalty"],
+      "severity": "medium",
+      "mandatory": false,
+      "applies_to_contract_types": ["service", "commercial"],
+      "missing_clause_key": null,
+      "remediation_hint": "Insérer une clause de gestion des non-conformités : délai de signalement, délai de correction, procédure d'escalade, garanties et compensations applicables."
+    },
+    {
+      "rule_id": "iso9001_sec9_audit",
+      "article": "§ 9.2",
+      "framework": "ISO9001",
+      "title": "Droit d'audit qualité non prévu",
+      "description": "La section 9.2 de l'ISO 9001:2015 exige des audits internes réguliers du SMQ. Pour les contrats de service critiques, le client devrait avoir le droit de réaliser ou mandater des audits qualité auprès du prestataire.",
+      "legal_text_fr": "L'organisation doit réaliser des audits internes à des intervalles planifiés pour fournir des informations permettant de déterminer si le système de management de la qualité est conforme aux exigences.",
+      "trigger_flags": [],
+      "trigger_labels": ["obligation"],
+      "severity": "low",
+      "mandatory": false,
+      "applies_to_contract_types": ["service"],
+      "missing_clause_key": null,
+      "remediation_hint": "Prévoir une clause d'audit qualité annuel, permettant au client ou à un tiers de vérifier la conformité de la prestation aux exigences contractuelles et aux certifications du prestataire."
+    }
+  ]
+}

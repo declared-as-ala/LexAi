@@ -1,0 +1,329 @@
+{
+  "_meta": {
+    "description": "Liste de contrôle des clauses obligatoires par type de contrat, selon LNPDP 2004-63 + RGPD + bonnes pratiques. Utilisée par Agent 3 pour la détection des clauses manquantes. Chaque 'clause_key' correspond à un 'missing_clause_key' dans les fichiers de règles.",
+    "detection_logic": "Agent 3 compare les labels et flags de toutes les clauses du document aux 'detected_by' de chaque clause requise. Si aucune clause ne correspond, la clause est marquée comme manquante.",
+    "contract_type_inference": "Le type de contrat est inféré depuis les labels produits par Agent 2. Si ambiguïté, appliquer la liste 'data_processing' (la plus stricte)."
+  },
+
+  "clause_definitions": {
+    "role_definitions": {
+      "clause_key": "role_definitions",
+      "title": "Définitions des rôles (responsable / sous-traitant)",
+      "description": "Clause définissant les rôles des parties vis-à-vis des données personnelles",
+      "legal_basis": ["LNPDP Art. 3", "GDPR Art. 4"],
+      "detected_by_labels": ["definition", "data_processing"],
+      "detected_by_flags": ["lnpdp_relevant"],
+      "detected_by_keywords": ["responsable du traitement", "sous-traitant", "data controller", "data processor"]
+    },
+    "processing_purpose": {
+      "clause_key": "processing_purpose",
+      "title": "Finalités du traitement",
+      "description": "Clause précisant les finalités pour lesquelles les données sont traitées",
+      "legal_basis": ["LNPDP Art. 7", "GDPR Art. 5(b)"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["lnpdp_relevant"],
+      "detected_by_keywords": ["finalité", "objet du traitement", "purpose", "finalités du traitement"]
+    },
+    "legal_basis": {
+      "clause_key": "legal_basis",
+      "title": "Base légale du traitement",
+      "description": "Clause identifiant la base légale justifiant le traitement (consentement, contrat, obligation légale, etc.)",
+      "legal_basis": ["LNPDP Art. 5", "GDPR Art. 6"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["lnpdp_relevant", "missing_consent_mechanism"],
+      "detected_by_keywords": ["base légale", "fondement juridique", "consentement", "legal basis", "licite"]
+    },
+    "consent_mechanism": {
+      "clause_key": "consent_mechanism",
+      "title": "Mécanisme de consentement",
+      "description": "Clause décrivant comment le consentement des personnes concernées est recueilli et géré",
+      "legal_basis": ["LNPDP Art. 14"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["missing_consent_mechanism"],
+      "detected_by_keywords": ["consentement", "consent", "opt-in", "accord préalable"]
+    },
+    "data_retention_period": {
+      "clause_key": "data_retention_period",
+      "title": "Durée de conservation des données",
+      "description": "Clause précisant la durée maximale de conservation des données personnelles",
+      "legal_basis": ["LNPDP Art. 23", "GDPR Art. 5(e)"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["missing_retention_period"],
+      "detected_by_keywords": ["durée de conservation", "conservation des données", "retention period", "délai de suppression"]
+    },
+    "data_subject_rights": {
+      "clause_key": "data_subject_rights",
+      "title": "Droits des personnes concernées",
+      "description": "Clause listant les droits des personnes concernées et les modalités d'exercice",
+      "legal_basis": ["LNPDP Art. 22-27", "GDPR Art. 12-22"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["missing_data_subject_rights"],
+      "detected_by_keywords": ["droit d'accès", "droit de rectification", "droit d'opposition", "droits des personnes", "data subject rights"]
+    },
+    "security_measures": {
+      "clause_key": "security_measures",
+      "title": "Mesures de sécurité techniques et organisationnelles",
+      "description": "Clause décrivant les mesures de sécurité mises en place pour protéger les données",
+      "legal_basis": ["LNPDP Art. 29", "GDPR Art. 32", "ISO 27001 A.5.20"],
+      "detected_by_labels": ["data_processing", "confidentiality"],
+      "detected_by_flags": ["missing_security_measures"],
+      "detected_by_keywords": ["mesures de sécurité", "chiffrement", "sécurité informatique", "security measures", "encryption"]
+    },
+    "subprocessor_clause": {
+      "clause_key": "subprocessor_clause",
+      "title": "Encadrement des sous-traitants",
+      "description": "Clause encadrant le recours à des sous-traitants pour le traitement des données",
+      "legal_basis": ["LNPDP Art. 30", "GDPR Art. 28"],
+      "detected_by_labels": ["data_processing", "obligation"],
+      "detected_by_flags": ["lnpdp_relevant"],
+      "detected_by_keywords": ["sous-traitant", "sous-traitance", "prestataire", "sub-processor", "tiers"]
+    },
+    "inpdp_declaration": {
+      "clause_key": "inpdp_declaration",
+      "title": "Déclaration INPDP",
+      "description": "Mention de la déclaration préalable auprès de l'INPDP",
+      "legal_basis": ["LNPDP Art. 36"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["lnpdp_relevant"],
+      "detected_by_keywords": ["inpdp", "déclaration", "instance nationale", "déclaration préalable"]
+    },
+    "dpo_designation": {
+      "clause_key": "dpo_designation",
+      "title": "Désignation du Délégué à la Protection des Données (DPD/DPO)",
+      "description": "Mention du DPD et ses coordonnées",
+      "legal_basis": ["LNPDP Art. 45-46", "GDPR Art. 37-39"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["missing_dpo_reference"],
+      "detected_by_keywords": ["délégué à la protection", "dpo", "dpd", "data protection officer"]
+    },
+    "cross_border_transfer_safeguards": {
+      "clause_key": "cross_border_transfer_safeguards",
+      "title": "Garanties pour transferts internationaux",
+      "description": "Clause décrivant les mécanismes légaux pour les transferts de données vers des pays tiers",
+      "legal_basis": ["LNPDP Art. 39", "GDPR Art. 44-49"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["unlawful_cross_border_transfer"],
+      "detected_by_keywords": ["transfert international", "pays tiers", "clauses contractuelles", "cct", "adequacy", "adéquation"]
+    },
+    "gdpr_art28_processor_clauses": {
+      "clause_key": "gdpr_art28_processor_clauses",
+      "title": "Clauses obligatoires DPA (GDPR Art. 28)",
+      "description": "Ensemble des clauses obligatoires d'un accord de traitement de données au sens du RGPD Art. 28",
+      "legal_basis": ["GDPR Art. 28"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["gdpr_relevant"],
+      "detected_by_keywords": ["dpa", "accord de traitement", "data processing agreement", "art. 28", "article 28"]
+    },
+    "gdpr_principles": {
+      "clause_key": "gdpr_principles",
+      "title": "Principes RGPD (Art. 5)",
+      "description": "Clause affirmant le respect des principes fondamentaux du RGPD",
+      "legal_basis": ["GDPR Art. 5"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["gdpr_relevant"],
+      "detected_by_keywords": ["rgpd", "gdpr", "règlement général", "principes", "licéité"]
+    },
+    "transparency_notice": {
+      "clause_key": "transparency_notice",
+      "title": "Notice d'information (transparence — RGPD Art. 13)",
+      "description": "Notice d'information fournie aux personnes concernées",
+      "legal_basis": ["GDPR Art. 13-14"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["gdpr_relevant", "missing_data_subject_rights"],
+      "detected_by_keywords": ["information préalable", "notice", "politique de confidentialité", "privacy notice"]
+    },
+    "breach_notification_procedure": {
+      "clause_key": "breach_notification_procedure",
+      "title": "Procédure de notification des violations de données",
+      "description": "Procédure de notification en cas de violation de données personnelles",
+      "legal_basis": ["GDPR Art. 33-34", "LNPDP Art. 29"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["missing_security_measures", "gdpr_relevant"],
+      "detected_by_keywords": ["violation de données", "data breach", "notification", "72 heures", "incident de sécurité"]
+    },
+    "right_to_erasure": {
+      "clause_key": "right_to_erasure",
+      "title": "Droit à l'effacement (droit à l'oubli)",
+      "description": "Procédure de traitement des demandes d'effacement",
+      "legal_basis": ["GDPR Art. 17"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["gdpr_relevant", "missing_data_subject_rights"],
+      "detected_by_keywords": ["droit à l'effacement", "droit à l'oubli", "right to erasure", "suppression des données"]
+    },
+    "gdpr_transfer_mechanism": {
+      "clause_key": "gdpr_transfer_mechanism",
+      "title": "Mécanisme de transfert RGPD (CCT/BCR)",
+      "description": "Documentation du mécanisme légal de transfert vers pays tiers",
+      "legal_basis": ["GDPR Art. 44-49"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["unlawful_cross_border_transfer", "gdpr_relevant"],
+      "detected_by_keywords": ["clauses contractuelles types", "cct", "bcr", "règles d'entreprise contraignantes", "standard contractual clauses"]
+    },
+    "access_control": {
+      "clause_key": "access_control",
+      "title": "Contrôle d'accès aux systèmes",
+      "description": "Politique de contrôle d'accès basée sur les rôles pour les systèmes traitant des données",
+      "legal_basis": ["ISO 27001 A.8.2", "LNPDP Art. 29"],
+      "detected_by_labels": ["data_processing", "confidentiality"],
+      "detected_by_flags": ["missing_security_measures"],
+      "detected_by_keywords": ["contrôle d'accès", "habilitation", "rbac", "accès restreint", "access control", "authentification"]
+    },
+    "secure_deletion": {
+      "clause_key": "secure_deletion",
+      "title": "Suppression sécurisée des données en fin de contrat",
+      "description": "Procédure de destruction sécurisée des données à la fin de la relation contractuelle",
+      "legal_basis": ["ISO 27001 A.8.10", "GDPR Art. 28§3g"],
+      "detected_by_labels": ["data_processing", "termination"],
+      "detected_by_flags": ["missing_retention_period"],
+      "detected_by_keywords": ["suppression définitive", "destruction des données", "restitution", "effacement sécurisé", "fin de contrat"]
+    },
+    "incident_response_procedure": {
+      "clause_key": "incident_response_procedure",
+      "title": "Procédure de réponse aux incidents de sécurité",
+      "description": "Procédure formalisée pour la détection, qualification et notification des incidents",
+      "legal_basis": ["ISO 27001 A.6.8", "GDPR Art. 33"],
+      "detected_by_labels": ["data_processing"],
+      "detected_by_flags": ["missing_security_measures"],
+      "detected_by_keywords": ["incident de sécurité", "gestion des incidents", "plan de réponse", "breach response"]
+    },
+    "security_sla": {
+      "clause_key": "security_sla",
+      "title": "SLA de sécurité — exigences contractuelles ISO 27001",
+      "description": "Exigences de sécurité contraignantes formalisées pour le prestataire",
+      "legal_basis": ["ISO 27001 A.5.20"],
+      "detected_by_labels": ["data_processing", "obligation"],
+      "detected_by_flags": ["missing_security_measures"],
+      "detected_by_keywords": ["sla", "niveau de service", "service level", "exigences de sécurité", "délai de notification"]
+    },
+    "service_level_agreement": {
+      "clause_key": "service_level_agreement",
+      "title": "SLA — Niveaux de service et indicateurs de performance",
+      "description": "Indicateurs de performance mesurables et conséquences contractuelles en cas de non-atteinte",
+      "legal_basis": ["ISO 9001 §6.2"],
+      "detected_by_labels": ["warranty", "obligation"],
+      "detected_by_flags": [],
+      "detected_by_keywords": ["sla", "niveau de service", "disponibilité", "uptime", "kpi", "indicateur"]
+    }
+  },
+
+  "checklists_by_contract_type": {
+
+    "data_processing": {
+      "label": "Contrat de traitement de données (DPA)",
+      "description": "Contrat dont l'objet principal est le traitement de données personnelles pour le compte d'un responsable.",
+      "trigger_labels": ["data_processing"],
+      "mandatory_clauses": [
+        "role_definitions",
+        "processing_purpose",
+        "legal_basis",
+        "data_retention_period",
+        "data_subject_rights",
+        "security_measures",
+        "subprocessor_clause",
+        "inpdp_declaration",
+        "breach_notification_procedure"
+      ],
+      "recommended_clauses": [
+        "consent_mechanism",
+        "dpo_designation",
+        "access_control",
+        "secure_deletion",
+        "incident_response_procedure"
+      ],
+      "if_gdpr_applies_add": [
+        "gdpr_principles",
+        "gdpr_art28_processor_clauses",
+        "transparency_notice",
+        "right_to_erasure",
+        "security_sla"
+      ],
+      "if_cross_border_add": [
+        "cross_border_transfer_safeguards",
+        "gdpr_transfer_mechanism"
+      ]
+    },
+
+    "service": {
+      "label": "Contrat de prestation de services (IT ou autre)",
+      "description": "Contrat de service dont la prestation implique l'accès ou le traitement de données personnelles.",
+      "trigger_labels": ["obligation", "warranty"],
+      "mandatory_clauses": [
+        "role_definitions",
+        "processing_purpose",
+        "legal_basis",
+        "data_retention_period",
+        "security_measures",
+        "subprocessor_clause"
+      ],
+      "recommended_clauses": [
+        "data_subject_rights",
+        "breach_notification_procedure",
+        "access_control",
+        "secure_deletion",
+        "service_level_agreement",
+        "security_sla"
+      ],
+      "if_gdpr_applies_add": [
+        "gdpr_principles",
+        "gdpr_art28_processor_clauses"
+      ],
+      "if_cross_border_add": [
+        "cross_border_transfer_safeguards",
+        "gdpr_transfer_mechanism"
+      ]
+    },
+
+    "employment": {
+      "label": "Contrat de travail",
+      "description": "Contrat de travail impliquant le traitement de données personnelles des employés.",
+      "trigger_labels": ["obligation"],
+      "mandatory_clauses": [
+        "role_definitions",
+        "processing_purpose",
+        "data_retention_period",
+        "data_subject_rights"
+      ],
+      "recommended_clauses": [
+        "legal_basis",
+        "security_measures",
+        "dpo_designation"
+      ],
+      "if_gdpr_applies_add": [
+        "transparency_notice"
+      ],
+      "if_cross_border_add": [
+        "cross_border_transfer_safeguards"
+      ]
+    },
+
+    "nda": {
+      "label": "Accord de confidentialité (NDA)",
+      "description": "Accord de non-divulgation portant sur des informations confidentielles pouvant inclure des données personnelles.",
+      "trigger_labels": ["confidentiality"],
+      "mandatory_clauses": [
+        "legal_basis"
+      ],
+      "recommended_clauses": [
+        "data_subject_rights",
+        "data_retention_period",
+        "security_measures"
+      ],
+      "if_gdpr_applies_add": [],
+      "if_cross_border_add": [
+        "cross_border_transfer_safeguards"
+      ]
+    },
+
+    "commercial": {
+      "label": "Contrat commercial",
+      "description": "Contrat commercial général. Si aucun traitement de données personnelles n'est impliqué, seules les règles générales s'appliquent.",
+      "trigger_labels": ["payment", "obligation"],
+      "mandatory_clauses": [
+        "legal_basis"
+      ],
+      "recommended_clauses": [],
+      "if_gdpr_applies_add": [],
+      "if_cross_border_add": []
+    }
+  }
+}

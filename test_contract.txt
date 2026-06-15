@@ -1,0 +1,140 @@
+CONTRAT DE PRESTATION DE SERVICES INFORMATIQUES
+
+Entre les soussignés :
+
+La société TECH SOLUTIONS TUNISIE, société à responsabilité limitée au capital de 50 000 dinars,
+dont le siège social est sis à Tunis, Lac 2, représentée par M. Ahmed Ben Salah, Directeur Général,
+ci-après dénommée « le Prestataire »,
+
+Et :
+
+La société CLIENT CORP, société anonyme au capital de 200 000 dinars,
+dont le siège social est sis à Sfax, Route de Tunis, représentée par Mme Fatma Trabelsi, Directrice,
+ci-après dénommée « le Client »,
+
+Il a été convenu ce qui suit :
+
+
+Article 1 — Objet du contrat
+
+Le présent contrat a pour objet la fourniture par le Prestataire au Client de services de développement
+logiciel, de maintenance applicative et de support technique. Le Prestataire s'engage à mettre à la
+disposition du Client ses compétences techniques pour la réalisation des prestations définies en annexe.
+
+
+Article 2 — Durée du contrat
+
+Le présent contrat est conclu pour une durée déterminée de 12 mois à compter de la date de signature.
+Il prendra effet le 1er janvier 2026 et expirera le 31 décembre 2026.
+À l'issue de cette période, le contrat pourra être renouvelé par accord écrit entre les parties.
+
+
+Article 3 — Obligations du Prestataire
+
+Le Prestataire s'engage à :
+- Fournir les prestations conformément aux spécifications techniques définies en annexe ;
+- Respecter les délais convenus avec le Client ;
+- Mettre à disposition du Client une équipe qualifiée et compétente ;
+- Informer le Client de toute difficulté susceptible d'affecter l'exécution des prestations ;
+- Maintenir la confidentialité de toutes les informations communiquées par le Client.
+
+
+Article 4 — Protection des données à caractère personnel
+
+Dans le cadre de l'exécution du présent contrat, le Prestataire est susceptible d'avoir accès à des
+données à caractère personnel appartenant au Client ou à ses employés. Le Prestataire agit en qualité
+de sous-traitant au sens de la loi n°2004-63 du 27 juillet 2004 portant sur la protection des données
+à caractère personnel (LNPDP) et du Règlement Général sur la Protection des Données (RGPD).
+
+Le Prestataire s'engage à :
+- Traiter les données personnelles uniquement sur instruction documentée du responsable du traitement ;
+- Garantir la confidentialité des données à caractère personnel traitées ;
+- Prendre toutes les mesures de sécurité techniques et organisationnelles requises par l'article 23
+  de la LNPDP pour protéger les données contre tout accès non autorisé, perte ou destruction ;
+- Ne pas transférer les données personnelles en dehors du territoire tunisien sans autorisation
+  préalable de l'Instance Nationale de Protection des Données Personnelles (INPDP) ;
+- Supprimer ou restituer toutes les données personnelles à l'issue du contrat.
+
+Le Prestataire désigne un délégué à la protection des données (DPO) joignable à l'adresse :
+dpo@techsolutions.tn. Les personnes concernées peuvent exercer leurs droits d'accès, de rectification
+et de suppression en contactant le DPO.
+
+
+Article 5 — Confidentialité
+
+Les parties s'engagent mutuellement à garder confidentielles toutes les informations, documents,
+données techniques, commerciales ou financières dont elles auraient connaissance dans le cadre de
+l'exécution du présent contrat. Cette obligation de confidentialité s'applique pendant toute la durée
+du contrat et pendant une période de 3 ans après son expiration.
+
+Ne sont pas considérées comme confidentielles les informations qui sont dans le domaine public,
+qui étaient déjà connues de la partie réceptrice, ou qui ont été obtenues légalement d'un tiers.
+
+
+Article 6 — Responsabilité et garanties
+
+Le Prestataire est responsable des dommages directs causés au Client résultant d'une faute prouvée
+dans l'exécution de ses obligations. La responsabilité du Prestataire est strictement limitée au
+montant total des honoraires perçus au titre du présent contrat au cours des 6 derniers mois précédant
+le fait générateur du dommage.
+
+En aucun cas le Prestataire ne sera tenu responsable des dommages indirects, pertes d'exploitation,
+pertes de bénéfices ou préjudices commerciaux subis par le Client.
+
+
+Article 7 — Prix et modalités de paiement
+
+En contrepartie des prestations fournies, le Client s'engage à payer au Prestataire une rémunération
+mensuelle de 5 000 dinars tunisiens hors taxes. La facturation est effectuée mensuellement à terme
+échu. Le paiement doit intervenir dans un délai de 30 jours à compter de la date d'émission de la
+facture. Tout retard de paiement entraîne l'application de pénalités de retard au taux légal en vigueur.
+
+
+Article 8 — Force majeure
+
+Aucune des parties ne sera tenue responsable de l'inexécution ou du retard dans l'exécution de ses
+obligations contractuelles si cette inexécution ou ce retard résulte d'un cas de force majeure tel que
+défini par le Code des Obligations et Contrats tunisien, notamment : catastrophes naturelles, guerres,
+émeutes, épidémies déclarées, ou décisions gouvernementales imprévisibles. La partie concernée devra
+notifier l'autre partie dans les 48 heures suivant la survenance de l'événement.
+
+
+Article 9 — Résiliation
+
+Chaque partie peut mettre fin au présent contrat en cas de manquement grave de l'autre partie à ses
+obligations, non remédié dans un délai de 15 jours suivant la mise en demeure adressée par lettre
+recommandée avec accusé de réception. Le Client peut également résilier le contrat sans faute avec
+un préavis de 30 jours. En cas de résiliation anticipée sans motif légitime, la partie à l'origine de
+la rupture devra verser à l'autre partie une indemnité égale à 2 mois de rémunération.
+
+
+Article 10 — Propriété intellectuelle
+
+Les développements logiciels réalisés spécifiquement pour le Client dans le cadre du présent contrat
+sont la propriété exclusive du Client dès leur livraison et paiement intégral. Le Prestataire conserve
+la propriété de ses outils, méthodes et savoir-faire préexistants utilisés pour la réalisation des
+prestations.
+
+
+Article 11 — Règlement des litiges
+
+En cas de litige relatif à l'interprétation ou à l'exécution du présent contrat, les parties s'engagent
+à rechercher une solution amiable dans un délai de 30 jours. À défaut d'accord amiable, tout litige
+sera soumis à la compétence exclusive des tribunaux de Tunis, le présent contrat étant régi par le
+droit tunisien et le Code des Obligations et Contrats.
+
+
+Article 12 — Dispositions générales
+
+Le présent contrat constitue l'intégralité de l'accord entre les parties et annule tout accord
+antérieur portant sur le même objet. Toute modification doit faire l'objet d'un avenant écrit signé
+par les deux parties. Si une clause du présent contrat est déclarée nulle ou inapplicable, les autres
+clauses restent en vigueur.
+
+Fait à Tunis, le 1er janvier 2026, en deux exemplaires originaux.
+
+
+Pour le Prestataire                          Pour le Client
+M. Ahmed Ben Salah                           Mme Fatma Trabelsi
+Directeur Général                            Directrice
+TECH SOLUTIONS TUNISIE                       CLIENT CORP

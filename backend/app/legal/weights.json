@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "description": "Pondération des cadres légaux pour le calcul du score global de conformité.",
+    "formula": "global_score = Σ(framework_score(F) × weight(F)) / Σ(weight(F) for active F)",
+    "notes": "La pondération LNPDP est la plus élevée car c'est le cadre légal de référence en Tunisie (obligatoire). Le RGPD s'applique uniquement en présence d'une dimension transfrontalière UE. L'ISO 27001 s'applique dès que le contrat implique un traitement de données ou une prestation IT. L'ISO 9001 s'applique aux contrats de service uniquement."
+  },
+  "frameworks": {
+    "LNPDP": {
+      "weight": 0.45,
+      "applies_when": "always",
+      "applies_when_flags": [],
+      "applies_when_labels": [],
+      "description": "Loi tunisienne de protection des données — toujours applicable en Tunisie"
+    },
+    "GDPR": {
+      "weight": 0.30,
+      "applies_when": "cross_border_or_eu_party",
+      "applies_when_flags": ["unlawful_cross_border_transfer", "gdpr_relevant"],
+      "applies_when_labels": ["data_processing"],
+      "description": "RGPD — applicable si transfert UE↔Tunisie détecté, ou partenaire UE, ou citoyens UE concernés"
+    },
+    "ISO27001": {
+      "weight": 0.15,
+      "applies_when": "data_processing_detected",
+      "applies_when_flags": ["lnpdp_relevant", "gdpr_relevant", "missing_security_measures"],
+      "applies_when_labels": ["data_processing"],
+      "description": "ISO 27001 — applicable pour les contrats de traitement de données et prestations IT"
+    },
+    "ISO9001": {
+      "weight": 0.10,
+      "applies_when": "service_contract_detected",
+      "applies_when_flags": [],
+      "applies_when_labels": ["warranty", "obligation"],
+      "description": "ISO 9001 — applicable pour les contrats de prestation de service"
+    }
+  },
+  "severity_weights": {
+    "critical": 30,
+    "high": 20,
+    "medium": 10,
+    "low": 5
+  },
+  "litigation_risk_thresholds": {
+    "critical": { "max_score": 40, "label": "critical", "description": "Risque contentieux très élevé — violations graves et multiples" },
+    "high":     { "min_score": 40, "max_score": 60, "label": "high", "description": "Risque contentieux élevé — plusieurs violations importantes" },
+    "medium":   { "min_score": 60, "max_score": 80, "label": "medium", "description": "Risque modéré — quelques lacunes à corriger" },
+    "low":      { "min_score": 80, "label": "low", "description": "Risque faible — contrat globalement conforme" }
+  }
+}

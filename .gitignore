@@ -1,0 +1,34 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+.env.prod
+
+# Production env (never commit real secrets)
+*.prod.secret
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Uploads / local data (adjust if you version some of these)
+uploads/
+
+# ML model weights and checkpoints — too large for git (use DVC or direct download)
+data/models/
+data/raw/
+data/processed/
+
+# Large log files
+*.log
+train_classifier.log
+
+# Misc
+image.png

@@ -1,0 +1,272 @@
+{
+  "_meta": {
+    "framework": "GDPR",
+    "full_name": "Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 (Règlement Général sur la Protection des Données)",
+    "jurisdiction": "Union européenne — applicable aux contrats tunisiens à dimension transfrontalière",
+    "language": "fr",
+    "version": "2016-04-27",
+    "authority": "CEPD — Comité Européen de la Protection des Données",
+    "source": "Journal officiel de l'Union européenne L 119 du 4 mai 2016",
+    "notes": "Ces règles s'appliquent aux contrats tunisiens comportant un transfert transfrontalier de données, ou lorsque le prestataire/partenaire est établi dans l'UE, ou lorsque des citoyens européens sont concernés. Règles dérivées des articles du RGPD original. Révision juriste recommandée avant production."
+  },
+  "rules": [
+    {
+      "rule_id": "gdpr_art5_principles",
+      "article": "Art. 5",
+      "framework": "GDPR",
+      "title": "Principes relatifs au traitement des données — non-conformité",
+      "description": "L'article 5 du RGPD pose les 6 principes fondamentaux de tout traitement de données personnelles : licéité, loyauté et transparence ; limitation des finalités ; minimisation des données ; exactitude ; limitation de la conservation ; intégrité et confidentialité. Le contrat doit expressément affirmer le respect de ces principes.",
+      "legal_text_fr": "Les données à caractère personnel doivent être : a) traitées de manière licite, loyale et transparente ; b) collectées pour des finalités déterminées, explicites et légitimes ; c) adéquates, pertinentes et limitées à ce qui est nécessaire ; d) exactes et tenues à jour ; e) conservées sous une forme ne permettant pas l'identification au-delà du nécessaire ; f) traitées de façon à garantir leur sécurité.",
+      "trigger_flags": ["gdpr_relevant"],
+      "trigger_labels": ["data_processing"],
+      "severity": "high",
+      "mandatory": true,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": "gdpr_principles",
+      "remediation_hint": "Insérer une clause d'engagements généraux par laquelle le responsable du traitement s'engage à respecter les principes de l'Art. 5 RGPD et équivalents LNPDP."
+    },
+    {
+      "rule_id": "gdpr_art6_lawfulness",
+      "article": "Art. 6",
+      "framework": "GDPR",
+      "title": "Base légale du traitement non précisée",
+      "description": "L'article 6 du RGPD liste exhaustivement les bases légales justifiant un traitement : consentement (a), exécution d'un contrat (b), obligation légale (c), intérêt vital (d), mission d'intérêt public (e), intérêt légitime (f). Le contrat doit identifier la ou les bases légales applicables pour chaque catégorie de traitement.",
+      "legal_text_fr": "Le traitement n'est licite que si, et dans la mesure où, au moins une des conditions suivantes est remplie : a) la personne concernée a consenti au traitement ; b) le traitement est nécessaire à l'exécution d'un contrat ; c) le traitement est nécessaire au respect d'une obligation légale ; f) le traitement est nécessaire aux fins des intérêts légitimes.",
+      "trigger_flags": ["gdpr_relevant", "missing_consent_mechanism"],
+      "trigger_labels": ["data_processing"],
+      "severity": "high",
+      "mandatory": true,
+      "applies_to_contract_types": ["data_processing", "service", "employment"],
+      "missing_clause_key": "gdpr_legal_basis",
+      "remediation_hint": "Pour chaque traitement décrit dans le contrat, identifier et documenter la base légale applicable parmi les 6 bases de l'Art. 6 RGPD. Si c'est le consentement, décrire les modalités de collecte et de retrait."
+    },
+    {
+      "rule_id": "gdpr_art13_transparency",
+      "article": "Art. 13",
+      "framework": "GDPR",
+      "title": "Informations obligatoires à fournir à la personne concernée absentes",
+      "description": "L'article 13 du RGPD exige que le responsable du traitement fournisse à la personne concernée, au moment de la collecte, un ensemble d'informations obligatoires : identité et coordonnées du responsable, coordonnées du DPO, finalités et base légale, destinataires, transferts éventuels, durée de conservation, droits de la personne.",
+      "legal_text_fr": "Lorsque des données à caractère personnel sont collectées directement auprès de la personne concernée, le responsable du traitement lui fournit, au moment où ces données sont obtenues, les informations suivantes : l'identité et les coordonnées du responsable, les finalités et la base juridique, les destinataires, la durée de conservation, les droits de la personne.",
+      "trigger_flags": ["gdpr_relevant", "missing_data_subject_rights"],
+      "trigger_labels": ["data_processing"],
+      "severity": "high",
+      "mandatory": true,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": "transparency_notice",
+      "remediation_hint": "Intégrer au contrat ou en annexe une notice d'information complète conforme à l'Art. 13 RGPD, en français. Cette notice doit être remise aux personnes concernées au moment de la collecte."
+    },
+    {
+      "rule_id": "gdpr_art17_erasure",
+      "article": "Art. 17",
+      "framework": "GDPR",
+      "title": "Droit à l'effacement (droit à l'oubli) non garanti",
+      "description": "L'article 17 du RGPD consacre le droit à l'effacement (dit 'droit à l'oubli'). La personne concernée peut demander l'effacement de ses données dans des cas définis (retrait du consentement, opposition, données illicitement traitées, etc.). Le contrat doit prévoir une procédure pour traiter ces demandes.",
+      "legal_text_fr": "La personne concernée a le droit d'obtenir du responsable du traitement l'effacement, dans les meilleurs délais, de données à caractère personnel la concernant et le responsable du traitement a l'obligation de procéder à cet effacement.",
+      "trigger_flags": ["gdpr_relevant", "missing_data_subject_rights"],
+      "trigger_labels": ["data_processing"],
+      "severity": "medium",
+      "mandatory": true,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": "right_to_erasure",
+      "remediation_hint": "Prévoir une procédure d'effacement des données sur demande : canal de dépôt de la demande, délai de traitement (30 jours selon l'Art. 12 RGPD), confirmation d'exécution, exceptions légales (obligation légale de conservation)."
+    },
+    {
+      "rule_id": "gdpr_art20_portability",
+      "article": "Art. 20",
+      "framework": "GDPR",
+      "title": "Droit à la portabilité des données non prévu",
+      "description": "L'article 20 du RGPD accorde à la personne concernée le droit de recevoir ses données dans un format structuré, couramment utilisé et lisible par machine, et de les transmettre à un autre responsable du traitement.",
+      "legal_text_fr": "Les personnes concernées ont le droit de recevoir les données à caractère personnel les concernant dans un format structuré, couramment utilisé et lisible par machine, et ont le droit de transmettre ces données à un autre responsable du traitement.",
+      "trigger_flags": ["gdpr_relevant", "missing_data_subject_rights"],
+      "trigger_labels": ["data_processing"],
+      "severity": "low",
+      "mandatory": false,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": null,
+      "remediation_hint": "Si le traitement repose sur le consentement ou l'exécution d'un contrat, prévoir une clause de portabilité des données précisant le format d'export disponible (JSON, CSV, XML) et le délai de transmission."
+    },
+    {
+      "rule_id": "gdpr_art25_privacy_by_design",
+      "article": "Art. 25",
+      "framework": "GDPR",
+      "title": "Protection des données dès la conception (Privacy by Design) non mentionnée",
+      "description": "L'article 25 du RGPD impose l'intégration de la protection des données dès la conception des systèmes et par défaut (Privacy by Design et Privacy by Default). Pour les contrats de développement logiciel ou de service informatique, cette obligation doit figurer comme engagement contractuel.",
+      "legal_text_fr": "Compte tenu de l'état des connaissances, des coûts de mise en œuvre et de la nature, de la portée, du contexte et des finalités du traitement ainsi que des risques, le responsable du traitement met en œuvre, tant lors de la détermination des moyens du traitement que lors du traitement lui-même, des mesures techniques et organisationnelles appropriées.",
+      "trigger_flags": ["gdpr_relevant", "missing_security_measures"],
+      "trigger_labels": ["data_processing", "obligation"],
+      "severity": "medium",
+      "mandatory": false,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": null,
+      "remediation_hint": "Pour les contrats de prestation informatique, ajouter une clause Privacy by Design obligeant le prestataire à intégrer des mesures de protection dès la conception, notamment : paramètres de confidentialité par défaut les plus restrictifs, minimisation des données collectées, pseudonymisation intégrée."
+    },
+    {
+      "rule_id": "gdpr_art28_processor_contract",
+      "article": "Art. 28",
+      "framework": "GDPR",
+      "title": "Contrat de sous-traitance RGPD — clauses obligatoires manquantes",
+      "description": "L'article 28 du RGPD est l'article central pour les contrats de sous-traitance de données. Il impose un contrat écrit contraignant le sous-traitant à traiter les données uniquement sur instruction du responsable, à mettre en place des mesures de sécurité, à ne pas recruter de sous-sous-traitants sans autorisation, à assister le responsable, et à supprimer ou restituer les données en fin de contrat. C'est l'obligation la plus complète du RGPD en matière contractuelle.",
+      "legal_text_fr": "Le traitement par un sous-traitant est régi par un contrat ou un autre acte juridique qui lie le sous-traitant à l'égard du responsable du traitement, qui définit l'objet, la durée, la nature et la finalité du traitement, le type de données à caractère personnel et les catégories de personnes concernées, et les obligations et les droits du responsable du traitement.",
+      "mandatory_sub_clauses": [
+        "Traitement uniquement sur instruction documentée du responsable",
+        "Obligation de confidentialité pour les personnes autorisées",
+        "Mise en place de mesures de sécurité (Art. 32)",
+        "Conditions de recrutement de sous-sous-traitants",
+        "Assistance au responsable pour les demandes d'exercice des droits",
+        "Assistance pour les obligations Art. 32-36 (sécurité, DPIA, notification violations)",
+        "Suppression ou restitution des données en fin de contrat",
+        "Mise à disposition des informations nécessaires au contrôle et aux audits"
+      ],
+      "trigger_flags": ["gdpr_relevant"],
+      "trigger_labels": ["data_processing"],
+      "severity": "critical",
+      "mandatory": true,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": "gdpr_art28_processor_clauses",
+      "remediation_hint": "Pour tout contrat impliquant un sous-traitant traitant des données pour le compte du responsable, l'intégralité des clauses de l'Art. 28 §3 RGPD doit être présente. Utiliser le modèle de DPA de la CNIL comme base."
+    },
+    {
+      "rule_id": "gdpr_art32_security",
+      "article": "Art. 32",
+      "framework": "GDPR",
+      "title": "Mesures de sécurité techniques et organisationnelles insuffisantes",
+      "description": "L'article 32 du RGPD impose la mise en place de mesures de sécurité adaptées au niveau de risque, incluant : chiffrement et pseudonymisation, moyens de garantir la confidentialité, intégrité, disponibilité et résilience, procédures de test et d'évaluation régulières. Ces mesures doivent être décrites dans le contrat.",
+      "legal_text_fr": "Compte tenu de l'état des connaissances, des coûts de mise en œuvre et de la nature, de la portée, du contexte et des finalités du traitement ainsi que des risques, le responsable du traitement et le sous-traitant mettent en œuvre les mesures techniques et organisationnelles appropriées afin de garantir un niveau de sécurité adapté au risque.",
+      "required_measures": [
+        "Pseudonymisation et chiffrement des données",
+        "Confidentialité, intégrité, disponibilité et résilience continues",
+        "Capacité de rétablissement après incident",
+        "Tests et évaluations régulières de l'efficacité des mesures"
+      ],
+      "trigger_flags": ["missing_security_measures", "gdpr_relevant"],
+      "trigger_labels": ["data_processing", "confidentiality"],
+      "severity": "high",
+      "mandatory": true,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": "security_measures",
+      "remediation_hint": "Ajouter une annexe technique listant les mesures de sécurité : algorithmes de chiffrement utilisés (AES-256 minimum), protocoles TLS, procédures de gestion des incidents, sauvegardes, tests de pénétration, plan de continuité d'activité."
+    },
+    {
+      "rule_id": "gdpr_art33_breach_notification",
+      "article": "Art. 33-34",
+      "framework": "GDPR",
+      "title": "Procédure de notification de violation de données absente",
+      "description": "L'article 33 du RGPD impose la notification des violations de données à l'autorité de contrôle compétente dans les 72 heures. L'article 34 impose dans certains cas la notification aux personnes concernées. Le contrat doit prévoir une procédure de notification entre les parties et vers les autorités.",
+      "legal_text_fr": "En cas de violation de données à caractère personnel, le responsable du traitement en notifie la violation en question à l'autorité de contrôle compétente sans délai excessif et, si possible, 72 heures au plus tard après en avoir pris connaissance.",
+      "trigger_flags": ["gdpr_relevant", "missing_security_measures"],
+      "trigger_labels": ["data_processing"],
+      "severity": "high",
+      "mandatory": true,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": "breach_notification_procedure",
+      "remediation_hint": "Prévoir une clause de notification des incidents incluant : délai de notification du sous-traitant vers le responsable (24h recommandé), contenu minimal de la notification, procédure de qualification de la violation, obligation de documentation interne."
+    },
+    {
+      "rule_id": "gdpr_art35_dpia",
+      "article": "Art. 35",
+      "framework": "GDPR",
+      "title": "Analyse d'impact (DPIA/AIPD) non prévue pour traitements à risque élevé",
+      "description": "L'article 35 du RGPD impose la réalisation d'une Analyse d'Impact relative à la Protection des Données (AIPD/DPIA) avant tout traitement susceptible de présenter un risque élevé pour les droits et libertés des personnes. Pour certains traitements (surveillance à grande échelle, données sensibles, profilage), la DPIA est obligatoire.",
+      "legal_text_fr": "Lorsqu'un type de traitement est susceptible d'engendrer un risque élevé pour les droits et libertés des personnes physiques, le responsable du traitement effectue, avant le traitement, une analyse de l'impact des opérations de traitement envisagées sur la protection des données à caractère personnel.",
+      "trigger_flags": ["gdpr_relevant", "excessive_data_collection"],
+      "trigger_labels": ["data_processing"],
+      "severity": "medium",
+      "mandatory": false,
+      "applies_to_contract_types": ["data_processing"],
+      "missing_clause_key": null,
+      "remediation_hint": "Pour les traitements à risque élevé, prévoir une clause obligeant le responsable du traitement à réaliser une DPIA et à la mettre à disposition du sous-traitant/co-responsable."
+    },
+    {
+      "rule_id": "gdpr_art44_international_transfer",
+      "article": "Art. 44-49",
+      "framework": "GDPR",
+      "title": "Transfert international de données sans garanties adéquates",
+      "description": "Les articles 44 à 49 du RGPD encadrent strictement les transferts de données vers des pays tiers à l'UE. Un transfert est possible uniquement si : décision d'adéquation de la Commission, garanties appropriées (clauses contractuelles types CCT, règles d'entreprise contraignantes BCR), ou dérogations de l'Art. 49. La Tunisie n'a pas de décision d'adéquation UE à ce jour.",
+      "legal_text_fr": "Tout transfert de données à caractère personnel qui fait ou est destiné à faire l'objet d'un traitement après son transfert vers un pays tiers ne peut avoir lieu que si les conditions énoncées dans le présent chapitre sont respectées.",
+      "transfer_mechanisms": [
+        "Décision d'adéquation de la Commission européenne (Art. 45)",
+        "Clauses Contractuelles Types (CCT) publiées par la Commission (Art. 46)",
+        "Règles d'Entreprise Contraignantes (BCR) (Art. 47)",
+        "Codes de conduite approuvés (Art. 46)",
+        "Dérogations spécifiques de l'Art. 49 (consentement explicite, nécessité contractuelle)"
+      ],
+      "trigger_flags": ["unlawful_cross_border_transfer", "gdpr_relevant"],
+      "trigger_labels": ["data_processing"],
+      "severity": "critical",
+      "mandatory": false,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": "gdpr_transfer_mechanism",
+      "remediation_hint": "Pour tout transfert de données UE↔Tunisie : incorporer les Clauses Contractuelles Types (CCT) de la Commission européenne (décision d'exécution 2021/914) comme annexe au contrat, ou documenter le mécanisme de transfert applicable. La Tunisie n'ayant pas de décision d'adéquation UE, les CCT sont le mécanisme recommandé."
+    },
+    {
+      "rule_id": "gdpr_art82_liability",
+      "article": "Art. 82",
+      "framework": "GDPR",
+      "title": "Responsabilité et répartition en cas de dommage non précisées",
+      "description": "L'article 82 du RGPD prévoit que toute personne ayant subi un dommage matériel ou moral du fait d'une violation peut obtenir réparation du responsable ou du sous-traitant. Le contrat doit préciser la répartition de responsabilité entre les parties en cas de violation.",
+      "legal_text_fr": "Toute personne ayant subi un dommage matériel ou moral du fait d'une violation du présent règlement a le droit d'obtenir du responsable du traitement ou du sous-traitant réparation du préjudice subi.",
+      "trigger_flags": ["gdpr_relevant"],
+      "trigger_labels": ["data_processing", "liability"],
+      "severity": "medium",
+      "mandatory": false,
+      "applies_to_contract_types": ["data_processing", "service"],
+      "missing_clause_key": null,
+      "remediation_hint": "Prévoir une clause de responsabilité distinguant les violations imputables au responsable de celles imputables au sous-traitant, et précisant les mécanismes d'exonération et de plafonnement des indemnités."
+    }
+  ],
+
+  "cnil_dpa_mandatory_clauses": {
+    "source": "Modèle de clause contractuelle CNIL — Sous-traitance de données personnelles",
+    "url": "https://www.cnil.fr/fr/les-clauses-contractuelles-types-de-la-commission-europeenne",
+    "mandatory_clauses": [
+      {
+        "clause_key": "processing_instructions",
+        "title": "Traitement sur instruction documentée",
+        "article_ref": "GDPR Art. 28 §3(a)",
+        "description": "Le sous-traitant ne traite les données que sur instruction écrite et documentée du responsable."
+      },
+      {
+        "clause_key": "confidentiality_staff",
+        "title": "Confidentialité du personnel autorisé",
+        "article_ref": "GDPR Art. 28 §3(b)",
+        "description": "Les personnes autorisées à traiter les données s'engagent à la confidentialité ou sont soumises à une obligation légale."
+      },
+      {
+        "clause_key": "security_measures_art32",
+        "title": "Mesures de sécurité Art. 32",
+        "article_ref": "GDPR Art. 28 §3(c) + Art. 32",
+        "description": "Le sous-traitant met en place des mesures de sécurité appropriées au niveau de risque."
+      },
+      {
+        "clause_key": "sub_subprocessor_authorization",
+        "title": "Autorisation pour sous-sous-traitants",
+        "article_ref": "GDPR Art. 28 §3(d)",
+        "description": "Autorisation préalable écrite du responsable requise pour tout recours à un sous-sous-traitant."
+      },
+      {
+        "clause_key": "data_subject_rights_assistance",
+        "title": "Assistance pour droits des personnes",
+        "article_ref": "GDPR Art. 28 §3(e)",
+        "description": "Le sous-traitant aide le responsable à satisfaire aux demandes d'exercice des droits."
+      },
+      {
+        "clause_key": "security_compliance_assistance",
+        "title": "Assistance pour obligations Art. 32-36",
+        "article_ref": "GDPR Art. 28 §3(f)",
+        "description": "Assistance pour sécurité, notification de violations, DPIA, consultation préalable."
+      },
+      {
+        "clause_key": "data_deletion_on_termination",
+        "title": "Suppression / restitution en fin de contrat",
+        "article_ref": "GDPR Art. 28 §3(g)",
+        "description": "À la fin du contrat, le sous-traitant supprime ou restitue toutes les données et copies."
+      },
+      {
+        "clause_key": "audit_rights",
+        "title": "Droit d'audit et de contrôle",
+        "article_ref": "GDPR Art. 28 §3(h)",
+        "description": "Le responsable peut conduire des audits ou mandater un auditeur tiers pour vérifier la conformité."
+      }
+    ]
+  }
+}

@@ -1,0 +1,369 @@
+{
+  "_meta": {
+    "language": "fr",
+    "version": "1.0.0",
+    "description": "Bibliothèque de modèles de recommandations (templates) pour Agent 4. Chaque template correspond à une règle (rule_id) du moteur d'évaluation. Les slots {VARIABLE} sont remplis avec les entités extraites par Agent 2.",
+    "slot_filling": "Les variables entre accolades {VARIABLE} sont des slots à remplir. Agent 4 tente de les résoudre avec les entités Agent 2 (EntityLabel), puis utilise la valeur par défaut si l'entité est absente.",
+    "generated_by": "template_v1"
+  },
+  "templates": [
+
+    {
+      "rule_id": "lnpdp_art3_definitions",
+      "framework": "LNPDP",
+      "article": "Art. 3",
+      "issue_description": "Les rôles de responsable du traitement et de sous-traitant ne sont pas définis dans le contrat.",
+      "recommendation_text": "Ajouter une clause de définitions précisant les rôles des parties conformément à l'article 3 de la loi n°2004-63.",
+      "rewritten_clause": "Définitions\n\nAu sens du présent contrat, on entend par :\n\n« Responsable du traitement » : {PARTY_CONTROLLER}, qui détermine les finalités et les moyens du traitement des données à caractère personnel, conformément à l'article 3 de la loi organique n°2004-63 du 27 juillet 2004.\n\n« Sous-traitant » : {PARTY_PROCESSOR}, qui traite des données à caractère personnel pour le compte du Responsable du traitement.\n\n« Données à caractère personnel » : toute information permettant d'identifier directement ou indirectement une personne physique.\n\n« Traitement » : toute opération effectuée sur des données à caractère personnel.",
+      "legal_rationale": "L'article 3 de la LNPDP définit les notions de traitement, de responsable du traitement et de sous-traitant. Ces définitions sont le fondement de toute clause de protection des données.",
+      "slots": {
+        "PARTY_CONTROLLER": { "entity_label": "PARTY", "default": "[Nom du responsable du traitement]" },
+        "PARTY_PROCESSOR": { "entity_label": "PARTY", "default": "[Nom du sous-traitant]" }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art5_legitimacy",
+      "framework": "LNPDP",
+      "article": "Art. 5",
+      "issue_description": "La base légale justifiant le traitement des données n'est pas précisée dans le contrat.",
+      "recommendation_text": "Identifier et documenter la base légale applicable au traitement : consentement, exécution contractuelle, obligation légale, ou intérêt légitime.",
+      "rewritten_clause": "Base légale du traitement\n\nLe traitement des données à caractère personnel effectué dans le cadre du présent contrat repose sur la base légale suivante, conformément à l'article 5 de la loi n°2004-63 :\n\n{LEGAL_BASIS_TEXT}\n\nLe Responsable du traitement s'engage à ne pas traiter les données à des fins incompatibles avec celles déclarées et à respecter les principes de licéité, loyauté et transparence du traitement.",
+      "legal_rationale": "L'article 5 de la LNPDP exige que tout traitement soit licite et loyal, fondé sur une finalité légitime. Sans base légale valide, le traitement est illicite au sens de la loi tunisienne.",
+      "slots": {
+        "LEGAL_BASIS_TEXT": {
+          "entity_label": null,
+          "default": "[ ] Le consentement explicite de la personne concernée (Art. 14 LNPDP)\n[ ] L'exécution du présent contrat (Art. 15 LNPDP)\n[ ] Le respect d'une obligation légale incombant au Responsable (Art. 16 LNPDP)\n[ ] La sauvegarde des intérêts vitaux de la personne concernée\n[ ] L'intérêt légitime du Responsable du traitement"
+        }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art7_purpose",
+      "framework": "LNPDP",
+      "article": "Art. 7",
+      "issue_description": "Les finalités du traitement de données personnelles ne sont pas précisées dans le contrat.",
+      "recommendation_text": "Décrire de manière précise et exhaustive les finalités pour lesquelles les données personnelles sont traitées.",
+      "rewritten_clause": "Finalités du traitement\n\nLes données à caractère personnel collectées dans le cadre du présent contrat sont traitées exclusivement pour les finalités suivantes :\n\n{PROCESSING_PURPOSES}\n\nConformément à l'article 7 de la loi n°2004-63, tout traitement ultérieur à des fins incompatibles avec celles listées ci-dessus est interdit sans accord préalable écrit du Responsable du traitement et, le cas échéant, sans nouveau consentement des personnes concernées.",
+      "legal_rationale": "L'article 7 de la LNPDP pose le principe de limitation des finalités : les données ne peuvent être collectées que pour des finalités déterminées, explicites et légitimes.",
+      "slots": {
+        "PROCESSING_PURPOSES": {
+          "entity_label": null,
+          "default": "1. [Préciser la finalité principale]\n2. [Préciser les finalités secondaires éventuelles]"
+        }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art14_consent",
+      "framework": "LNPDP",
+      "article": "Art. 14",
+      "issue_description": "Le mécanisme de recueil du consentement des personnes concernées n'est pas décrit dans le contrat.",
+      "recommendation_text": "Insérer une clause décrivant le processus de recueil, de documentation et de retrait du consentement des personnes concernées.",
+      "rewritten_clause": "Consentement des personnes concernées\n\nLorsque le traitement est fondé sur le consentement, le Responsable du traitement s'engage à :\n\n1. Recueillir le consentement libre, spécifique, éclairé et univoque de chaque personne concernée avant tout traitement de ses données, conformément à l'article 14 de la loi n°2004-63 ;\n\n2. Documenter ce consentement (date, heure, canal, version du formulaire) et conserver cette preuve pendant toute la durée du contrat ;\n\n3. Permettre à chaque personne concernée de retirer son consentement à tout moment, sans que cela ne pénalise la personne concernée, par le biais de {WITHDRAWAL_CHANNEL} ;\n\n4. Traiter toute demande de retrait dans un délai maximum de {WITHDRAWAL_DELAY} jours.",
+      "legal_rationale": "L'article 14 de la LNPDP impose le consentement préalable, exprès et éclairé de la personne concernée. L'article 3 précise que ce consentement doit être libre et spécifique.",
+      "slots": {
+        "WITHDRAWAL_CHANNEL": { "entity_label": null, "default": "[email à préciser / formulaire en ligne / courrier postal]" },
+        "WITHDRAWAL_DELAY": { "entity_label": "DURATION", "default": "30" }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art22_data_subject_rights",
+      "framework": "LNPDP",
+      "article": "Art. 22",
+      "issue_description": "Les droits des personnes concernées (accès, rectification, opposition, suppression) ne sont pas mentionnés dans le contrat.",
+      "recommendation_text": "Ajouter une clause listant tous les droits accordés aux personnes concernées et les modalités pratiques d'exercice.",
+      "rewritten_clause": "Droits des personnes concernées\n\nConformément aux articles 22 à 27 de la loi organique n°2004-63 du 27 juillet 2004, chaque personne concernée dispose des droits suivants :\n\n• Droit d'accès (Art. 22) : obtenir confirmation du traitement et copie des données ;\n• Droit de rectification (Art. 25) : faire corriger les données inexactes ou incomplètes ;\n• Droit d'opposition (Art. 26) : s'opposer au traitement pour motif légitime ;\n• Droit de suppression : demander l'effacement des données lorsque leur conservation n'est plus justifiée.\n\nModalités d'exercice : les demandes doivent être adressées à {DPO_CONTACT} par {REQUEST_CHANNEL}.\n\nDélai de réponse : {RESPONSE_DELAY} jours à compter de la réception de la demande.",
+      "legal_rationale": "Les articles 22 à 27 de la LNPDP garantissent aux personnes concernées un droit d'accès, de rectification, d'opposition et d'information. Ces droits sont inaliénables et leur non-respect est sanctionné pénalement.",
+      "slots": {
+        "DPO_CONTACT": { "entity_label": "PARTY", "default": "[Contact du responsable protection des données]" },
+        "REQUEST_CHANNEL": { "entity_label": null, "default": "courrier recommandé ou email à [adresse à préciser]" },
+        "RESPONSE_DELAY": { "entity_label": "DURATION", "default": "30" }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art23_retention",
+      "framework": "LNPDP",
+      "article": "Art. 23",
+      "issue_description": "La durée de conservation des données personnelles n'est pas précisée dans le contrat.",
+      "recommendation_text": "Insérer une clause de durée de conservation spécifiant la durée maximale et le sort des données à l'issue.",
+      "rewritten_clause": "Durée de conservation des données\n\nLes données à caractère personnel collectées dans le cadre du présent contrat seront conservées pendant une durée maximale de {RETENTION_DURATION} à compter de {RETENTION_TRIGGER_EVENT}.\n\nÀ l'expiration de ce délai, ou dès que les données ne sont plus nécessaires aux finalités déclarées, le Responsable du traitement s'engage à :\n\n• Supprimer définitivement les données de ses systèmes actifs ;\n• Détruire toutes copies de sauvegarde dans un délai de {DELETION_DELAY} jours supplémentaires ;\n• Ou, si une obligation légale l'impose, archiver les données dans un système d'accès restreint pour une durée déterminée de {ARCHIVAL_DURATION}, après quoi elles seront définitivement supprimées.\n\nConformément à l'article 23 de la loi n°2004-63.",
+      "legal_rationale": "L'article 23 de la LNPDP interdit la conservation des données au-delà de la durée nécessaire. Le non-respect de cet article est passible des sanctions prévues aux articles 52 à 57 de la loi.",
+      "slots": {
+        "RETENTION_DURATION": { "entity_label": "DURATION", "default": "[À PRÉCISER — ex: 5 ans]" },
+        "RETENTION_TRIGGER_EVENT": { "entity_label": "DATE", "default": "la date de fin du présent contrat" },
+        "DELETION_DELAY": { "entity_label": "DURATION", "default": "90" },
+        "ARCHIVAL_DURATION": { "entity_label": "DURATION", "default": "[durée d'archivage légal à préciser]" }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art29_security",
+      "framework": "LNPDP",
+      "article": "Art. 29",
+      "issue_description": "Les mesures de sécurité techniques et organisationnelles ne sont pas décrites dans le contrat.",
+      "recommendation_text": "Ajouter une clause détaillant les mesures de sécurité mises en place pour protéger les données personnelles.",
+      "rewritten_clause": "Mesures de sécurité\n\nConformément à l'article 29 de la loi n°2004-63, le Responsable du traitement et le Sous-traitant s'engagent à mettre en œuvre les mesures techniques et organisationnelles suivantes :\n\nMesures techniques :\n• Chiffrement des données personnelles en transit (TLS 1.2 minimum) et au repos (AES-256) ;\n• Authentification forte (double facteur) pour l'accès aux systèmes traitant des données personnelles ;\n• Journalisation des accès et audits réguliers ;\n• Procédures de sauvegarde et de restauration testées.\n\nMesures organisationnelles :\n• Limitation de l'accès aux données au personnel ayant besoin d'en connaître ;\n• Formation annuelle du personnel sur la protection des données ;\n• Procédure documentée de gestion des incidents de sécurité ;\n• Engagement de confidentialité signé par tout personnel accédant aux données.",
+      "legal_rationale": "L'article 29 de la LNPDP impose au responsable du traitement de prendre toutes précautions utiles pour préserver la sécurité des données. L'absence de mesures de sécurité constitue une violation directement sanctionnable.",
+      "slots": {}
+    },
+
+    {
+      "rule_id": "lnpdp_art30_subprocessor",
+      "framework": "LNPDP",
+      "article": "Art. 30",
+      "issue_description": "Le recours à des sous-traitants pour le traitement des données n'est pas encadré par le contrat.",
+      "recommendation_text": "Ajouter une clause encadrant le recours aux sous-traitants et leurs obligations en matière de protection des données.",
+      "rewritten_clause": "Sous-traitance du traitement\n\nLe Sous-traitant s'engage à ne pas confier tout ou partie du traitement des données à un tiers sans l'accord préalable et écrit du Responsable du traitement, conformément à l'article 30 de la loi n°2004-63.\n\nEn cas d'autorisation, le Sous-traitant doit :\n1. Conclure un contrat écrit avec le sous-sous-traitant imposant des obligations de protection des données au moins équivalentes à celles du présent contrat ;\n2. Transmettre au Responsable les coordonnées de tout sous-sous-traitant utilisé ;\n3. Rester solidairement responsable envers le Responsable du traitement des actes et omissions du sous-sous-traitant.\n\nListe des sous-traitants autorisés : {SUBPROCESSOR_LIST}",
+      "legal_rationale": "L'article 30 de la LNPDP impose que la sous-traitance du traitement soit encadrée par un contrat écrit offrant des garanties équivalentes. La responsabilité du responsable du traitement reste engagée même en cas de sous-traitance.",
+      "slots": {
+        "SUBPROCESSOR_LIST": { "entity_label": null, "default": "[À compléter — liste des sous-traitants autorisés en Annexe]" }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art36_declaration",
+      "framework": "LNPDP",
+      "article": "Art. 36",
+      "issue_description": "Le contrat ne mentionne pas la déclaration préalable du traitement auprès de l'INPDP.",
+      "recommendation_text": "Ajouter une clause attestant de la conformité administrative du traitement vis-à-vis de l'INPDP.",
+      "rewritten_clause": "Déclaration auprès de l'INPDP\n\nLe Responsable du traitement déclare avoir effectué la déclaration préalable du présent traitement auprès de l'Instance Nationale de Protection des Données Personnelles (INPDP), conformément à l'article 36 de la loi organique n°2004-63 du 27 juillet 2004.\n\nNuméro de déclaration INPDP : {INPDP_DECLARATION_NUMBER}\nDate de déclaration : {INPDP_DECLARATION_DATE}\n\nLe Responsable du traitement s'engage à notifier l'INPDP de toute modification substantielle du traitement et à renouveler sa déclaration si nécessaire.",
+      "legal_rationale": "L'article 36 de la LNPDP impose une déclaration préalable auprès de l'INPDP avant tout traitement de données personnelles. L'absence de déclaration constitue une infraction pénale au sens de l'article 52.",
+      "slots": {
+        "INPDP_DECLARATION_NUMBER": { "entity_label": null, "default": "[Numéro de déclaration INPDP — à obtenir auprès de l'INPDP]" },
+        "INPDP_DECLARATION_DATE": { "entity_label": "DATE", "default": "[Date de déclaration]" }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art39_transfer",
+      "framework": "LNPDP",
+      "article": "Art. 39",
+      "issue_description": "Un transfert international de données personnelles est identifié sans les garanties légales requises.",
+      "recommendation_text": "Encadrer le transfert international de données avec les garanties requises par l'article 39 de la LNPDP.",
+      "rewritten_clause": "Transfert international de données\n\nLe transfert des données à caractère personnel vers {DESTINATION_COUNTRY} est encadré comme suit, conformément à l'article 39 de la loi n°2004-63 :\n\nMécanisme légal applicable :\n{TRANSFER_MECHANISM}\n\nLe Responsable du traitement s'engage à :\n1. Obtenir l'autorisation préalable de l'INPDP si celle-ci est requise ;\n2. Vérifier que le pays destinataire assure un niveau de protection adéquat ;\n3. Mettre en place des clauses contractuelles types ou tout autre mécanisme de protection approuvé ;\n4. Documenter et conserver la preuve du mécanisme de transfert utilisé.",
+      "legal_rationale": "L'article 39 de la LNPDP subordonne tout transfert international à l'autorisation de l'INPDP ou à l'assurance d'un niveau de protection adéquat du pays destinataire. Les transferts non autorisés sont passibles des sanctions pénales de l'article 52.",
+      "slots": {
+        "DESTINATION_COUNTRY": { "entity_label": "JURISDICTION", "default": "[Pays de destination à préciser]" },
+        "TRANSFER_MECHANISM": {
+          "entity_label": null,
+          "default": "[ ] Autorisation de l'INPDP (Art. 39 al. 1)\n[ ] Pays destinataire reconnu comme offrant un niveau adéquat\n[ ] Clauses contractuelles types approuvées\n[ ] Consentement explicite de la personne concernée"
+        }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art45_dpo",
+      "framework": "LNPDP",
+      "article": "Art. 45-46",
+      "issue_description": "La désignation d'un Délégué à la Protection des Données (DPD/DPO) n'est pas mentionnée dans le contrat.",
+      "recommendation_text": "Insérer une clause mentionnant le DPD et ses coordonnées de contact.",
+      "rewritten_clause": "Délégué à la Protection des Données (DPD)\n\nLe Responsable du traitement a désigné un Délégué à la Protection des Données (DPD) conformément aux recommandations de l'INPDP :\n\nNom / Fonction : {DPO_NAME}\nAdresse email : {DPO_EMAIL}\nTéléphone : {DPO_PHONE}\n\nLe DPD est le point de contact pour toute question relative à la protection des données personnelles, les demandes d'exercice des droits des personnes concernées et les communications avec l'INPDP.\n\nLe Sous-traitant peut contacter le DPD du Responsable pour toute question relative à l'interprétation du présent contrat en matière de protection des données.",
+      "legal_rationale": "Les articles 45 et 46 de la LNPDP et les recommandations INPDP prévoient la désignation d'un DPD pour certaines catégories de responsables du traitement. Sa désignation facilite la mise en conformité et la communication avec l'autorité de contrôle.",
+      "slots": {
+        "DPO_NAME": { "entity_label": "PARTY", "default": "[Nom ou fonction du DPD]" },
+        "DPO_EMAIL": { "entity_label": null, "default": "[dpo@organisation.tn]" },
+        "DPO_PHONE": { "entity_label": null, "default": "[+216 XX XXX XXX]" }
+      }
+    },
+
+    {
+      "rule_id": "gdpr_art5_principles",
+      "framework": "GDPR",
+      "article": "Art. 5 RGPD",
+      "issue_description": "Le contrat ne mentionne pas le respect des principes fondamentaux du RGPD.",
+      "recommendation_text": "Ajouter une clause d'engagements généraux affirmant le respect des principes de l'Art. 5 RGPD.",
+      "rewritten_clause": "Principes du traitement (RGPD Art. 5)\n\nDans le cadre du présent contrat, le Responsable du traitement s'engage à respecter les principes suivants conformément à l'article 5 du Règlement (UE) 2016/679 (RGPD) :\n\na) Licéité, loyauté et transparence : les données sont traitées de manière licite, loyale et transparente ;\nb) Limitation des finalités : les données ne sont collectées que pour des finalités déterminées et légitimes ;\nc) Minimisation des données : seules les données adéquates et nécessaires sont collectées ;\nd) Exactitude : les données sont exactes et tenues à jour ;\ne) Limitation de la conservation : les données ne sont pas conservées au-delà de la durée nécessaire ;\nf) Intégrité et confidentialité : les données sont traitées de façon à garantir leur sécurité.",
+      "legal_rationale": "L'article 5 §2 du RGPD pose le principe d'accountability : le responsable du traitement est responsable du respect de ces principes et doit être en mesure de le démontrer.",
+      "slots": {}
+    },
+
+    {
+      "rule_id": "gdpr_art28_processor_contract",
+      "framework": "GDPR",
+      "article": "Art. 28 RGPD",
+      "issue_description": "Le contrat ne contient pas les clauses obligatoires du RGPD pour les accords de sous-traitance de données (Art. 28 §3).",
+      "recommendation_text": "Intégrer toutes les clauses obligatoires de l'Art. 28 §3 RGPD ou incorporer les Clauses Contractuelles Types (CCT) de la Commission européenne.",
+      "rewritten_clause": "Accord de traitement des données (DPA) — Art. 28 RGPD\n\nLe Sous-traitant, {PARTY_PROCESSOR}, traite les données à caractère personnel uniquement pour le compte et sur instruction documentée du Responsable du traitement, {PARTY_CONTROLLER}.\n\nLe Sous-traitant s'engage à :\n\na) Ne traiter les données que sur instruction écrite du Responsable (Art. 28§3a) ;\nb) S'assurer que les personnes autorisées à traiter les données s'engagent à la confidentialité (Art. 28§3b) ;\nc) Mettre en place les mesures de sécurité requises par l'article 32 du RGPD (Art. 28§3c) ;\nd) Ne recruter de sous-sous-traitant qu'avec autorisation préalable écrite du Responsable (Art. 28§3d) ;\ne) Aider le Responsable à répondre aux demandes d'exercice des droits des personnes concernées (Art. 28§3e) ;\nf) Aider le Responsable à satisfaire aux obligations des Art. 32 à 36 du RGPD (Art. 28§3f) ;\ng) Au choix du Responsable, supprimer ou restituer l'ensemble des données à l'issue du contrat (Art. 28§3g) ;\nh) Mettre à disposition du Responsable toutes informations nécessaires pour démontrer sa conformité et permettre les audits (Art. 28§3h).",
+      "legal_rationale": "L'article 28 du RGPD est impératif pour tout contrat de sous-traitance impliquant des données de citoyens européens. L'absence de DPA conforme expose le responsable à des amendes allant jusqu'à 10 millions d'euros ou 2% du CA mondial.",
+      "slots": {
+        "PARTY_PROCESSOR": { "entity_label": "PARTY", "default": "[Nom du sous-traitant]" },
+        "PARTY_CONTROLLER": { "entity_label": "PARTY", "default": "[Nom du responsable du traitement]" }
+      }
+    },
+
+    {
+      "rule_id": "gdpr_art32_security",
+      "framework": "GDPR",
+      "article": "Art. 32 RGPD",
+      "issue_description": "Les mesures de sécurité techniques requises par l'Art. 32 du RGPD ne sont pas décrites.",
+      "recommendation_text": "Ajouter une annexe technique détaillant les mesures de sécurité conformes à l'Art. 32 RGPD.",
+      "rewritten_clause": "Mesures de sécurité — Art. 32 RGPD\n\nCompte tenu de la nature, de la portée, du contexte et des finalités du traitement, les parties mettent en œuvre les mesures de sécurité suivantes, conformément à l'article 32 du RGPD :\n\na) Pseudonymisation et chiffrement des données à caractère personnel ;\nb) Moyens permettant de garantir la confidentialité, l'intégrité, la disponibilité et la résilience continues des systèmes ;\nc) Moyens permettant de rétablir la disponibilité et l'accès aux données dans des délais appropriés en cas d'incident ;\nd) Procédures visant à tester, à analyser et à évaluer régulièrement l'efficacité des mesures techniques et organisationnelles.\n\nLe détail des mesures est précisé en Annexe Technique [Annexe {SECURITY_ANNEX_REF}].",
+      "legal_rationale": "L'article 32 du RGPD impose une obligation de sécurité « state of the art » proportionnée au risque. En cas de violation de données, l'absence de mesures adéquates aggrave la responsabilité.",
+      "slots": {
+        "SECURITY_ANNEX_REF": { "entity_label": null, "default": "[numéro d'annexe]" }
+      }
+    },
+
+    {
+      "rule_id": "gdpr_art33_breach_notification",
+      "framework": "GDPR",
+      "article": "Art. 33-34 RGPD",
+      "issue_description": "Aucune procédure de notification de violation de données n'est prévue dans le contrat.",
+      "recommendation_text": "Ajouter une clause de notification des violations de données avec les délais requis par l'Art. 33 RGPD.",
+      "rewritten_clause": "Notification des violations de données personnelles\n\nEn cas de violation de données à caractère personnel, les parties respectent la procédure suivante :\n\n1. Notification interne : Le Sous-traitant notifie le Responsable du traitement de toute violation dans un délai de {INTERNAL_NOTIFICATION_DELAY} heures après en avoir pris connaissance, par {NOTIFICATION_CHANNEL} ;\n\n2. Notification à l'autorité : Le Responsable du traitement notifie l'autorité de contrôle compétente (INPDP en Tunisie / CEPD/autorité nationale pour le RGPD) dans les 72 heures, conformément à l'article 33 du RGPD ;\n\n3. Contenu de la notification : La notification inclut a minima la nature de la violation, les données et personnes concernées, les conséquences probables et les mesures correctives prises ;\n\n4. Documentation : Toute violation est documentée en interne, même si elle n'est pas notifiée à l'autorité.",
+      "legal_rationale": "L'article 33 du RGPD impose une notification à l'autorité de contrôle dans les 72 heures. Le non-respect de ce délai constitue une violation autonome du RGPD, indépendamment de la violation de données initiale.",
+      "slots": {
+        "INTERNAL_NOTIFICATION_DELAY": { "entity_label": "DURATION", "default": "24" },
+        "NOTIFICATION_CHANNEL": { "entity_label": null, "default": "email à [adresse DPO] avec accusé de réception" }
+      }
+    },
+
+    {
+      "rule_id": "gdpr_art44_international_transfer",
+      "framework": "GDPR",
+      "article": "Art. 44-49 RGPD",
+      "issue_description": "Un transfert de données vers un pays tiers est identifié sans que le mécanisme légal de transfert (CCT, BCR, etc.) ne soit précisé.",
+      "recommendation_text": "Documenter le mécanisme légal de transfert applicable et l'incorporer au contrat, ou y faire référence.",
+      "rewritten_clause": "Transfert de données vers des pays tiers — Art. 44 RGPD\n\nTout transfert de données à caractère personnel vers {DESTINATION_COUNTRY} est fondé sur le mécanisme légal suivant, conformément aux articles 44 à 49 du RGPD :\n\n{GDPR_TRANSFER_MECHANISM}\n\nLes Clauses Contractuelles Types (CCT) de la Commission européenne (décision d'exécution 2021/914 du 4 juin 2021) sont incorporées par référence au présent contrat et s'appliquent à tous les transferts de données entre les parties.\n\nNota : La Tunisie ne bénéficie pas à ce jour d'une décision d'adéquation de la Commission européenne. Les CCT constituent le mécanisme de transfert recommandé pour les transferts UE↔Tunisie.",
+      "legal_rationale": "L'article 44 du RGPD interdit tout transfert vers un pays tiers sans mécanisme légal valide. Les amendes pour transfert illicite peuvent atteindre 20 millions d'euros ou 4% du CA mondial (Art. 83 §5 RGPD).",
+      "slots": {
+        "DESTINATION_COUNTRY": { "entity_label": "JURISDICTION", "default": "[Pays destinataire]" },
+        "GDPR_TRANSFER_MECHANISM": {
+          "entity_label": null,
+          "default": "[ ] Clauses Contractuelles Types Commission européenne (décision 2021/914)\n[ ] Règles d'Entreprise Contraignantes (BCR) approuvées\n[ ] Code de conduite approuvé\n[ ] Consentement explicite de la personne concernée (Art. 49§1a)"
+        }
+      }
+    },
+
+    {
+      "rule_id": "iso27001_a5_20_supplier_agreements",
+      "framework": "ISO27001",
+      "article": "Annexe A 5.20",
+      "issue_description": "Aucune exigence de sécurité contraignante n'est formalisée pour le prestataire.",
+      "recommendation_text": "Ajouter une annexe de sécurité fournisseur avec des exigences minimales mesurables.",
+      "rewritten_clause": "Exigences de sécurité fournisseur — ISO 27001 Annexe A 5.20\n\nDans le cadre du présent contrat, {PARTY_PROCESSOR} s'engage à respecter les exigences minimales de sécurité suivantes :\n\n1. Chiffrement : toutes les données personnelles en transit sont protégées par TLS 1.2 minimum ; les données au repos sont chiffrées avec AES-256 ;\n2. Contrôle d'accès : accès aux données limité au personnel autorisé selon le principe du moindre privilège ;\n3. Journalisation : tous les accès aux données personnelles sont journalisés et conservés pendant {LOG_RETENTION} mois ;\n4. Gestion des incidents : tout incident de sécurité impactant les données est notifié dans les {INCIDENT_NOTIFICATION_DELAY} heures ;\n5. Audits : le prestataire accepte les audits de conformité diligentés par le Responsable, avec un préavis de {AUDIT_NOTICE} jours.\n\nLe prestataire fournit sur demande la preuve de sa conformité (rapport d'audit, certificat ISO 27001, rapport de test d'intrusion).",
+      "legal_rationale": "Le contrôle 5.20 de l'ISO 27001:2022 exige que les exigences de sécurité soient formalisées dans les accords avec les fournisseurs. Ces exigences protègent contre les violations de données via la chaîne de sous-traitance.",
+      "slots": {
+        "PARTY_PROCESSOR": { "entity_label": "PARTY", "default": "[Nom du prestataire]" },
+        "LOG_RETENTION": { "entity_label": "DURATION", "default": "12" },
+        "INCIDENT_NOTIFICATION_DELAY": { "entity_label": "DURATION", "default": "24" },
+        "AUDIT_NOTICE": { "entity_label": "DURATION", "default": "15" }
+      }
+    },
+
+    {
+      "rule_id": "iso27001_a8_10_data_deletion",
+      "framework": "ISO27001",
+      "article": "Annexe A 8.10",
+      "issue_description": "Aucune procédure de suppression sécurisée des données en fin de contrat n'est prévue.",
+      "recommendation_text": "Ajouter une clause de restitution/destruction des données à la fin du contrat.",
+      "rewritten_clause": "Suppression et restitution des données en fin de contrat — ISO 27001 A.8.10\n\nÀ l'expiration ou à la résiliation du présent contrat, et au plus tard dans un délai de {DELETION_DEADLINE} jours, {PARTY_PROCESSOR} s'engage à :\n\nOption A — Suppression : supprimer définitivement et irrécupérablement toutes les données à caractère personnel confiées, ainsi que toutes les copies de sauvegarde, selon la méthode {DELETION_METHOD} ;\n\nOption B — Restitution : restituer au Responsable du traitement l'intégralité des données dans le format {DATA_FORMAT}, puis procéder à leur suppression sécurisée.\n\nDans les deux cas, le prestataire fournit une attestation écrite de destruction/restitution dans un délai de {ATTESTATION_DELAY} jours après exécution.\n\nConformément à ISO 27001:2022 Annexe A contrôle 8.10, et à l'article 28§3g du RGPD.",
+      "legal_rationale": "Le contrôle 8.10 de l'ISO 27001:2022 et l'Art. 28§3g du RGPD imposent la suppression ou restitution des données en fin de contrat. Cette obligation protège contre la conservation non autorisée post-contrat.",
+      "slots": {
+        "PARTY_PROCESSOR": { "entity_label": "PARTY", "default": "[Nom du prestataire]" },
+        "DELETION_DEADLINE": { "entity_label": "DURATION", "default": "30" },
+        "DELETION_METHOD": { "entity_label": null, "default": "effacement sécurisé conforme au standard NIST 800-88 (Clear ou Purge selon la sensibilité)" },
+        "DATA_FORMAT": { "entity_label": null, "default": "[format structuré interopérable : JSON, CSV ou XML]" },
+        "ATTESTATION_DELAY": { "entity_label": "DURATION", "default": "10" }
+      }
+    },
+
+    {
+      "rule_id": "iso27001_a9_access_control",
+      "framework": "ISO27001",
+      "article": "Annexe A 8.2/8.3",
+      "issue_description": "Aucune politique de contrôle d'accès aux systèmes traitant les données personnelles n'est précisée.",
+      "recommendation_text": "Intégrer des exigences de contrôle d'accès dans les obligations du prestataire.",
+      "rewritten_clause": "Contrôle d'accès aux données — ISO 27001 Annexe A\n\n{PARTY_PROCESSOR} s'engage à mettre en place et maintenir une politique de contrôle d'accès aux données personnelles du présent contrat incluant :\n\n1. Attribution des accès : les accès sont attribués sur la base du principe du besoin d'en connaître (need-to-know) et du moindre privilège ;\n2. Authentification : l'accès aux systèmes hébergeant des données personnelles requiert une authentification à deux facteurs (2FA/MFA) ;\n3. Gestion du cycle de vie : les accès sont créés, modifiés et révoqués via une procédure formalisée ; les comptes sont désactivés immédiatement en cas de départ d'un collaborateur ;\n4. Revue périodique : les droits d'accès font l'objet d'une revue {ACCESS_REVIEW_FREQUENCY} ;\n5. Traçabilité : tout accès aux données personnelles est journalisé avec horodatage et identifiant utilisateur.",
+      "legal_rationale": "Les contrôles de gestion des accès de l'ISO 27001:2022 sont complémentaires aux obligations de sécurité de la LNPDP (Art. 29) et du RGPD (Art. 32). Des accès non maîtrisés sont la première cause de violations de données.",
+      "slots": {
+        "PARTY_PROCESSOR": { "entity_label": "PARTY", "default": "[Nom du prestataire]" },
+        "ACCESS_REVIEW_FREQUENCY": { "entity_label": "DURATION", "default": "trimestrielle" }
+      }
+    },
+
+    {
+      "rule_id": "iso27001_a6_incident_management",
+      "framework": "ISO27001",
+      "article": "Annexe A 6.8",
+      "issue_description": "Aucune procédure contractuelle de gestion des incidents de sécurité n'est définie.",
+      "recommendation_text": "Définir une procédure contractuelle de détection, qualification et notification des incidents de sécurité.",
+      "rewritten_clause": "Gestion des incidents de sécurité — ISO 27001 Annexe A 6.8\n\nLes parties conviennent de la procédure suivante pour la gestion des incidents de sécurité :\n\n1. Détection et qualification : tout événement susceptible d'affecter la sécurité des données personnelles est qualifié sous {QUALIFICATION_DELAY} heures selon son niveau de criticité (P1 : critique / P2 : élevé / P3 : modéré / P4 : faible) ;\n\n2. Notification : le Sous-traitant notifie le Responsable du traitement dans les délais suivants :\n   - P1 (critique) : {P1_DELAY} heures ;\n   - P2 (élevé) : {P2_DELAY} heures ;\n   - P3 et P4 : rapport hebdomadaire ;\n\n3. Rapport d'incident : un rapport détaillé est transmis dans les {REPORT_DELAY} jours suivant la clôture de l'incident ;\n\n4. Post-mortem : pour tout incident P1 ou P2, une analyse des causes racines est réalisée et le plan de remédiation est communiqué.",
+      "legal_rationale": "Le contrôle 6.8 de l'ISO 27001:2022 et l'Art. 33 du RGPD exigent des procédures de réponse aux incidents. Une gestion rapide et documentée des incidents réduit significativement l'impact légal et réputationnel.",
+      "slots": {
+        "QUALIFICATION_DELAY": { "entity_label": "DURATION", "default": "4" },
+        "P1_DELAY": { "entity_label": "DURATION", "default": "2" },
+        "P2_DELAY": { "entity_label": "DURATION", "default": "24" },
+        "REPORT_DELAY": { "entity_label": "DURATION", "default": "5" }
+      }
+    },
+
+    {
+      "rule_id": "gdpr_art6_lawfulness",
+      "framework": "GDPR",
+      "article": "Art. 6 RGPD",
+      "issue_description": "La base légale du traitement n'est pas identifiée parmi les 6 bases légales de l'Art. 6 du RGPD.",
+      "recommendation_text": "Identifier et documenter la base légale applicable parmi les 6 bases listées à l'Art. 6 du RGPD pour chaque traitement.",
+      "rewritten_clause": "Base légale du traitement — RGPD Art. 6\n\nLe traitement des données à caractère personnel effectué dans le cadre du présent contrat est fondé sur la/les base(s) légale(s) suivante(s), conformément à l'article 6 du Règlement (UE) 2016/679 :\n\n{GDPR_LEGAL_BASIS}\n\nLe Responsable du traitement s'engage à documenter et à être en mesure de démontrer la licéité de chaque traitement (principe d'accountability, Art. 5§2 RGPD).\n\nSi la base légale est le consentement (Art. 6§1a), le Responsable s'engage à recueillir un consentement libre, spécifique, éclairé et univoque, à permettre son retrait à tout moment sans préjudice pour la personne concernée.",
+      "legal_rationale": "L'article 6 du RGPD liste exhaustivement les bases légales valides. Tout traitement sans base légale identifiée constitue un traitement illicite exposant à des amendes jusqu'à 20M€ ou 4% du CA mondial.",
+      "slots": {
+        "GDPR_LEGAL_BASIS": {
+          "entity_label": null,
+          "default": "[ ] Art. 6§1a — Consentement de la personne concernée\n[ ] Art. 6§1b — Exécution du présent contrat\n[ ] Art. 6§1c — Obligation légale\n[ ] Art. 6§1d — Intérêts vitaux\n[ ] Art. 6§1e — Mission d'intérêt public\n[ ] Art. 6§1f — Intérêts légitimes du responsable"
+        }
+      }
+    },
+
+    {
+      "rule_id": "gdpr_art13_transparency",
+      "framework": "GDPR",
+      "article": "Art. 13 RGPD",
+      "issue_description": "Les informations obligatoires à fournir aux personnes concernées lors de la collecte de données ne sont pas présentes (Art. 13 RGPD).",
+      "recommendation_text": "Rédiger et intégrer une notice d'information complète conforme à l'Art. 13 RGPD.",
+      "rewritten_clause": "Notice d'information — RGPD Art. 13\n\nConformément à l'article 13 du Règlement (UE) 2016/679, les personnes concernées sont informées des éléments suivants au moment de la collecte de leurs données :\n\n1. Identité et coordonnées du Responsable du traitement : {CONTROLLER_IDENTITY}\n2. Coordonnées du Délégué à la Protection des Données : {DPO_CONTACT}\n3. Finalités et base juridique du traitement : {PURPOSE_AND_BASIS}\n4. Destinataires des données : {DATA_RECIPIENTS}\n5. Transferts vers pays tiers : {TRANSFER_INFO}\n6. Durée de conservation : {RETENTION_DURATION}\n7. Droits de la personne concernée : droit d'accès, rectification, effacement, opposition, portabilité, limitation du traitement\n8. Droit de retirer le consentement à tout moment (si applicable)\n9. Droit d'introduire une réclamation auprès d'une autorité de contrôle (INPDP / CNIL)",
+      "legal_rationale": "L'article 13 du RGPD impose une obligation de transparence active : le responsable doit fournir proactivement ces informations, sans que la personne ait à les demander.",
+      "slots": {
+        "CONTROLLER_IDENTITY": { "entity_label": "PARTY", "default": "[Nom, adresse, email du responsable du traitement]" },
+        "DPO_CONTACT": { "entity_label": "PARTY", "default": "[Email du DPO ou mention 'non obligatoire']" },
+        "PURPOSE_AND_BASIS": { "entity_label": null, "default": "[Finalités décrites à l'Art. X du présent contrat] — Base : [Art. 6§1__ RGPD]" },
+        "DATA_RECIPIENTS": { "entity_label": null, "default": "[Services internes concernés, prestataires, autorités si applicable]" },
+        "TRANSFER_INFO": { "entity_label": "JURISDICTION", "default": "[Aucun transfert hors UE / Transferts vers [PAYS] encadrés par CCT]" },
+        "RETENTION_DURATION": { "entity_label": "DURATION", "default": "[Durée définie à l'Art. X du présent contrat]" }
+      }
+    },
+
+    {
+      "rule_id": "gdpr_art17_erasure",
+      "framework": "GDPR",
+      "article": "Art. 17 RGPD",
+      "issue_description": "Le droit à l'effacement (droit à l'oubli) prévu par l'Art. 17 du RGPD n'est pas garanti dans le contrat.",
+      "recommendation_text": "Ajouter une clause garantissant le droit à l'effacement et la procédure pour y répondre dans les délais légaux.",
+      "rewritten_clause": "Droit à l'effacement — RGPD Art. 17\n\nConformément à l'article 17 du Règlement (UE) 2016/679, toute personne concernée peut demander l'effacement de ses données dans les cas suivants :\na) Les données ne sont plus nécessaires aux finalités pour lesquelles elles ont été collectées ;\nb) La personne retire son consentement et il n'existe pas d'autre base légale ;\nc) La personne s'oppose au traitement (Art. 21) et il n'existe pas de motif légitime prépondérant ;\nd) Les données ont fait l'objet d'un traitement illicite ;\ne) L'effacement est requis pour respecter une obligation légale.\n\nProcédure :\n- Les demandes doivent être adressées à {DPO_CONTACT} ;\n- Le Responsable répond dans un délai maximum de {ERASURE_RESPONSE_DELAY} jours ;\n- En cas d'effacement, le Responsable informe les destinataires auxquels les données ont été transmises.\n\nExceptions : l'effacement peut être refusé pour l'exercice du droit à la liberté d'expression, le respect d'une obligation légale, l'intérêt public ou la constatation, l'exercice ou la défense de droits en justice.",
+      "legal_rationale": "Le droit à l'effacement est un droit fondamental consacré par l'Art. 17 du RGPD. Le délai de réponse de 30 jours est fixé par l'Art. 12§3 du RGPD. Son non-respect est sanctionnable.",
+      "slots": {
+        "DPO_CONTACT": { "entity_label": "PARTY", "default": "[Email du DPO ou du responsable protection des données]" },
+        "ERASURE_RESPONSE_DELAY": { "entity_label": "DURATION", "default": "30" }
+      }
+    },
+
+    {
+      "rule_id": "lnpdp_art28_special_categories",
+      "framework": "LNPDP",
+      "article": "Art. 28 LNPDP",
+      "issue_description": "Le contrat semble impliquer le traitement de données sensibles (santé, origines, opinions, biométrie) sans encadrement spécifique conforme à l'Art. 28 de la LNPDP.",
+      "recommendation_text": "Encadrer expressément le traitement de données sensibles avec les garanties renforcées exigées par l'Art. 28 de la LNPDP.",
+      "rewritten_clause": "Traitement de données à caractère particulier (données sensibles)\n\nLe présent contrat autorise le traitement des catégories de données suivantes, qualifiées de données à caractère particulier au sens de l'article 28 de la loi n°2004-63 :\n\n{SENSITIVE_DATA_CATEGORIES}\n\nCe traitement est autorisé sur le fondement de {SENSITIVE_DATA_EXCEPTION}.\n\nGaranties renforcées applicables :\n1. Autorisation préalable de l'INPDP obtenue (n° : {INPDP_AUTHORIZATION}) ;\n2. Accès strictement limité au personnel soumis au secret professionnel ;\n3. Chiffrement renforcé obligatoire (AES-256 minimum) ;\n4. Journalisation complète de tous les accès ;\n5. Durée de conservation réduite au strict minimum : {SENSITIVE_RETENTION_DURATION} ;\n6. Interdiction formelle de tout transfert hors du territoire tunisien sans autorisation INPDP.",
+      "legal_rationale": "L'article 28 de la LNPDP interdit en principe le traitement de données sensibles. Les dérogations sont limitativement énumérées et nécessitent souvent une autorisation préalable de l'INPDP. La violation de cette disposition est passible de sanctions pénales aggravées.",
+      "slots": {
+        "SENSITIVE_DATA_CATEGORIES": { "entity_label": "DATA_CATEGORY", "default": "[Préciser : données de santé / origines raciales ou ethniques / opinions politiques / convictions religieuses / données biométriques / données génétiques]" },
+        "SENSITIVE_DATA_EXCEPTION": { "entity_label": null, "default": "[Préciser l'exception applicable : consentement explicite / obligation légale / intérêt vital / procédure judiciaire / etc.]" },
+        "INPDP_AUTHORIZATION": { "entity_label": null, "default": "[Numéro d'autorisation INPDP à obtenir préalablement]" },
+        "SENSITIVE_RETENTION_DURATION": { "entity_label": "DURATION", "default": "[Durée minimale nécessaire — à préciser]" }
+      }
+    }
+
+  ]
+}

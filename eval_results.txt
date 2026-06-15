@@ -1,0 +1,22 @@
+Evaluating ClauseClassifier on 1483 test records …
+
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 2441.89it/s]
+{"timestamp": "2026-04-20T12:59:57.716742+00:00", "level": "INFO", "logger": "app.services.nlp.clause_classifier", "message": "classifier_loaded_finetuned", "model": "C:\\Users\\Ala\\Desktop\\PFE\\data\\models\\clause_classifier"}
+Label                          P      R     F1  Support
+----------------------------------------------------------
+definition                 0.946  0.909  0.927       77
+obligation                 0.877  0.946  0.910      503
+liability                  0.711  0.857  0.777       63
+termination                0.881  0.974  0.925      228
+data_processing            0.929  1.000  0.963       13
+confidentiality            0.973  0.923  0.947      117
+dispute_resolution         0.989  0.978  0.983       91
+force_majeure              0.966  1.000  0.982       28
+penalty                    0.940  0.878  0.908       90
+ip_rights                  0.866  0.933  0.898       90
+payment                    0.916  0.825  0.868      211
+warranty                   0.921  0.812  0.863      144
+----------------------------------------------------------
+micro avg                  0.897  0.915  0.906     1483
+
+Model used: finetuned/clause_classifier

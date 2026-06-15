@@ -1,0 +1,277 @@
+{
+  "_meta": {
+    "description": "Catalogue des datasets publics et ressources légales utilisables pour l'entraînement et l'évaluation des agents NLP de la plateforme LegalTech. Ce fichier sert de référence documentaire — les datasets eux-mêmes ne sont pas inclus dans le dépôt.",
+    "last_updated": "2026-04-20"
+  },
+
+  "datasets": [
+
+    {
+      "id": "cuad",
+      "name": "CUAD — Contract Understanding Atticus Dataset",
+      "language": ["en"],
+      "size": "510 contrats, 13 000+ annotations de clauses",
+      "formats": ["PDF", "TXT", "JSON"],
+      "license": "CC BY 4.0",
+      "url": "https://www.atticusprojectai.org/cuad",
+      "huggingface": "https://huggingface.co/datasets/cuad",
+      "description": "Dataset de référence pour la compréhension automatique des contrats en anglais. Annoté par des juristes américains sur 41 types de clauses contractuelles (durée, indemnisation, clause de non-concurrence, etc.). Très utilisé pour les benchmarks en NLP contractuel.",
+      "use_for_this_project": [
+        "Taxonomie de types de clauses (traduite et adaptée au contexte tunisien/français)",
+        "Architecture de modèles de classification multi-label",
+        "Format d'annotation de référence (adapté pour Agent 2)",
+        "Benchmark pour évaluer la précision du classifieur de clauses"
+      ],
+      "relevant_clause_types_mapped": {
+        "Data Processing": "data_processing",
+        "Confidentiality": "confidentiality",
+        "Limitation Of Liability": "liability",
+        "Termination For Convenience": "termination",
+        "Governing Law": "dispute_resolution",
+        "IP Ownership Assignment": "ip_rights",
+        "Audit Rights": "obligation",
+        "Non-Compete": "obligation"
+      },
+      "limitations": "En anglais uniquement. Pas de clauses LNPDP ou de droit civil français/tunisien. Utile uniquement pour la taxonomie et l'architecture du modèle."
+    },
+
+    {
+      "id": "ledgar",
+      "name": "LEDGAR — SEC Contract Clause Dataset",
+      "language": ["en"],
+      "size": "60 000 provisions contractuelles, 12 catégories",
+      "formats": ["JSON"],
+      "license": "Public domain (SEC filings)",
+      "url": "https://drive.switch.ch/index.php/s/j9S0GRMAbGZKa1A",
+      "huggingface": "https://huggingface.co/datasets/lex_glue",
+      "description": "Dataset de clauses contractuelles extraites des dépôts SEC (Securities and Exchange Commission américaine). Catégorisé en 12 types de provisions. Idéal pour pré-entraîner un classifieur de clauses avant fine-tuning sur données tunisiennes.",
+      "use_for_this_project": [
+        "Pré-entraînement du classifieur de clauses Agent 2",
+        "Enrichissement de la taxonomie de types de clauses",
+        "Source de données d'augmentation pour les clauses en anglais"
+      ],
+      "limitations": "Contexte américain exclusivement. Clauses SEC = contrats d'entreprises cotées. Inadapté pour le droit civil tunisien sans adaptation."
+    },
+
+    {
+      "id": "mapa",
+      "name": "MAPA — Multilingual Anonymisation for Public Administrations",
+      "language": ["fr", "de", "es", "it", "nl", "pt", "en", "bg", "hr", "cs", "da", "et", "fi", "hu", "lv", "lt", "mt", "pl", "ro", "sk", "sl", "sv", "ga"],
+      "size": "Plus de 1 million de tokens annotés, 23 langues de l'UE",
+      "formats": ["CoNLL", "JSON"],
+      "license": "CC BY 4.0",
+      "url": "https://github.com/hltcoe/MAPA",
+      "description": "Corpus de textes légaux de l'UE en 23 langues, annoté pour la reconnaissance d'entités nommées (NER) dans le domaine juridique. Inclut le français. Annotations : noms de personnes, organisations, dates, localisations dans des documents légaux.",
+      "use_for_this_project": [
+        "Entraînement ou fine-tuning du modèle NER d'Agent 2 (extraction d'entités en français)",
+        "Détection d'entités dans les contrats : PARTY, ROLE, DATE, JURISDICTION",
+        "Données d'entraînement supplémentaires pour l'anonymisation de PII dans les contrats"
+      ],
+      "limitations": "Textes administratifs et judiciaires UE — pas spécifiquement des contrats commerciaux. Pas de couverture du droit tunisien."
+    },
+
+    {
+      "id": "eurlex",
+      "name": "EUR-Lex — Base de données du droit de l'Union européenne",
+      "language": ["fr", "en", "de", "es", "it", "ar"],
+      "size": "Plus de 5 millions de documents légaux",
+      "formats": ["XML", "HTML", "PDF"],
+      "license": "Open data (© UE, réutilisation libre à des fins non commerciales)",
+      "url": "https://eur-lex.europa.eu/",
+      "api": "https://eur-lex.europa.eu/content/tools/webservices/",
+      "description": "Base de données officielle du droit de l'UE : règlements, directives, décisions, jurisprudence. Contient le texte officiel du RGPD en français et dans toutes les langues de l'UE, les CCT (clauses contractuelles types), et les décisions de la Commission sur l'adéquation.",
+      "key_documents_for_this_project": [
+        {
+          "document": "Règlement (UE) 2016/679 — RGPD",
+          "url": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX%3A32016R0679",
+          "relevance": "Texte de référence pour les règles gdpr.json"
+        },
+        {
+          "document": "Décision CCT 2021/914 — Clauses Contractuelles Types",
+          "url": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX%3A32021D0914",
+          "relevance": "Modèle de clauses pour les transferts UE→pays tiers, applicable UE↔Tunisie"
+        },
+        {
+          "document": "Directive 95/46/CE (abrogée, remplacée par RGPD)",
+          "url": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX%3A31995L0046",
+          "relevance": "Contexte historique — la LNPDP s'en est inspirée"
+        }
+      ],
+      "use_for_this_project": [
+        "Textes légaux de référence pour construire les règles RGPD",
+        "Corpus de textes légaux en français pour fine-tuning du modèle NLP",
+        "CCT comme modèle de clause contractuelle pour les templates Agent 4"
+      ]
+    },
+
+    {
+      "id": "cnil_dpa_model",
+      "name": "CNIL — Modèle de Clauses Contractuelles pour la Sous-traitance",
+      "language": ["fr"],
+      "size": "Document de référence (clauses types)",
+      "formats": ["PDF", "DOCX"],
+      "license": "Libre de droits — document officiel CNIL",
+      "url": "https://www.cnil.fr/fr/les-clauses-contractuelles-types-de-la-commission-europeenne",
+      "description": "La CNIL (Commission Nationale de l'Informatique et des Libertés, France) a publié des guides et modèles de clauses pour les accords de sous-traitance de données conformes au RGPD. Ces modèles sont directement réutilisables comme base des templates Agent 4.",
+      "mandatory_clauses_from_cnil_model": [
+        "Objet, durée, nature et finalité du traitement",
+        "Type de données et catégories de personnes concernées",
+        "Traitement uniquement sur instruction documentée",
+        "Confidentialité du personnel autorisé",
+        "Mesures de sécurité (Art. 32 RGPD)",
+        "Conditions de recours aux sous-sous-traitants",
+        "Assistance pour droits des personnes concernées",
+        "Assistance pour obligations Art. 32-36",
+        "Suppression ou restitution en fin de contrat",
+        "Droit d'audit du responsable"
+      ],
+      "use_for_this_project": [
+        "Base des templates de clauses Agent 4 (recommendations_fr.json)",
+        "Référence pour la vérification de conformité RGPD Art. 28 dans Agent 3",
+        "Modèle de DPA (Data Processing Agreement) en français"
+      ]
+    },
+
+    {
+      "id": "legalbert",
+      "name": "Legal-BERT — Pre-trained Legal Language Model",
+      "language": ["en"],
+      "size": "12 Go de textes légaux pour pré-entraînement",
+      "formats": ["HuggingFace model"],
+      "license": "Apache 2.0",
+      "huggingface": "https://huggingface.co/nlpaueb/legal-bert-base-uncased",
+      "description": "Modèle BERT spécialisé pour les textes légaux en anglais. Pré-entraîné sur des corpus de contrats, législation et jurisprudence. Performances supérieures à BERT standard sur les tâches NLP légales.",
+      "use_for_this_project": "Modèle de référence pour l'architecture — à utiliser uniquement si textes anglais présents. Pour le français, utiliser CamemBERT-legal ou XLM-RoBERTa."
+    },
+
+    {
+      "id": "legal_fr_camembert",
+      "name": "CamemBERT — Modèle de langue français",
+      "language": ["fr"],
+      "size": "138 millions de paramètres",
+      "formats": ["HuggingFace model"],
+      "license": "MIT",
+      "huggingface": "https://huggingface.co/camembert-base",
+      "description": "CamemBERT est le modèle BERT de référence pour le français, pré-entraîné sur 138 Go de textes français. Utilisé comme base pour les tâches NLP en français dans ce projet.",
+      "use_for_this_project": [
+        "Base du classifieur de clauses Agent 2 (fine-tuning sur contrats français)",
+        "Embeddings de phrases pour la segmentation sémantique des clauses",
+        "NER en français pour l'extraction d'entités (PARTY, ROLE, DURATION)"
+      ]
+    },
+
+    {
+      "id": "xlm_roberta_legal",
+      "name": "legal-xlm-roberta-large — Modèle légal multilingue",
+      "language": ["fr", "de", "en", "es", "it", "nl", "ar"],
+      "size": "355 millions de paramètres",
+      "formats": ["HuggingFace model"],
+      "license": "CC BY 4.0",
+      "huggingface": "https://huggingface.co/joelniklaus/legal-xlm-roberta-large",
+      "description": "XLM-RoBERTa fine-tuné sur des textes légaux multilingues (EUR-Lex, JRC-Acquis, MAPA). C'est le modèle zero-shot utilisé par défaut dans Agent 2 quand aucun modèle fine-tuné n'est disponible.",
+      "use_for_this_project": [
+        "Classifieur zéro-shot pour les clauses (déjà intégré dans Agent 2)",
+        "Couverture multilingue : textes en français ET arabe",
+        "Fallback quand le modèle fine-tuné n'est pas disponible"
+      ]
+    },
+
+    {
+      "id": "lex_glue",
+      "name": "LexGLUE — Legal General Language Understanding Evaluation",
+      "language": ["en"],
+      "size": "7 benchmarks légaux, >300 000 exemples",
+      "formats": ["HuggingFace datasets"],
+      "license": "Varied (CC BY, Apache 2.0)",
+      "huggingface": "https://huggingface.co/datasets/lex_glue",
+      "description": "Benchmark de référence pour l'évaluation des modèles NLP légaux. Inclut ECtHR, SCOTUS, EUR-LEX, LEDGAR, UNFAIR-ToS, CaseHOLD, MultiEURLEX. Utile pour évaluer la qualité des modèles utilisés dans Agent 2.",
+      "use_for_this_project": [
+        "Benchmark pour évaluer les modèles NLP d'Agent 2",
+        "LEDGAR (inclus dans LexGLUE) pour la classification de clauses",
+        "MultiEURLEX pour les textes légaux multilingues"
+      ]
+    },
+
+    {
+      "id": "lnpdp_text",
+      "name": "LNPDP 2004-63 — Texte officiel",
+      "language": ["fr", "ar"],
+      "size": "1 document (~50 articles)",
+      "formats": ["PDF", "HTML"],
+      "license": "Domaine public (texte de loi tunisien)",
+      "url": "http://www.inpdp.nat.tn/index.php?id=2",
+      "url_jort": "https://www.legislation.tn/detailtexte/Loi-num-2004-63-du-27-07-2004-jort-2004-061__2004062004631",
+      "description": "Texte officiel de la loi organique n°2004-63 du 27 juillet 2004 portant sur la protection des données à caractère personnel. Disponible en arabe et en français sur le site de l'INPDP et de la base législative tunisienne.",
+      "key_articles_for_agent3": [
+        "Art. 3 — Définitions",
+        "Art. 4 — Principes généraux",
+        "Art. 5 — Licéité du traitement",
+        "Art. 7 — Finalité",
+        "Art. 8 — Proportionnalité",
+        "Art. 14 — Consentement",
+        "Art. 22 — Droit d'accès",
+        "Art. 23 — Durée de conservation",
+        "Art. 25 — Droit de rectification",
+        "Art. 26 — Droit d'opposition",
+        "Art. 28 — Données sensibles",
+        "Art. 29 — Sécurité",
+        "Art. 30 — Sous-traitance",
+        "Art. 36 — Déclaration INPDP",
+        "Art. 39 — Transferts internationaux",
+        "Art. 52-57 — Sanctions pénales"
+      ]
+    },
+
+    {
+      "id": "contracts_fr_synthetic",
+      "name": "Contrats français synthétiques — à générer",
+      "language": ["fr"],
+      "size": "Cible : 200 contrats synthétiques (50 par type)",
+      "formats": ["JSON", "TXT", "PDF"],
+      "license": "Propriétaire (généré dans ce projet)",
+      "description": "Corpus de contrats synthétiques en français à générer pour entraîner et évaluer les agents. Types visés : contrats de traitement de données (DPA), contrats de service IT, NDA, contrats de travail tunisiens. Générés via templates + GPT/Mistral avec variation des clauses.",
+      "generation_script": "backend/scripts/generate_synthetic.py",
+      "use_for_this_project": [
+        "Données d'entraînement pour Agent 2 (classification de clauses en français)",
+        "Données de test pour Agent 3 (évaluation de conformité LNPDP)",
+        "Base de contrats pour démo de la plateforme",
+        "Dataset d'annotation pour les violations LNPDP"
+      ],
+      "target_distribution": {
+        "data_processing_agreements": 50,
+        "service_contracts_it": 50,
+        "nda": 50,
+        "employment_contracts": 50
+      }
+    }
+
+  ],
+
+  "useful_legal_resources": [
+    {
+      "name": "INPDP — Instance Nationale de Protection des Données Personnelles",
+      "url": "http://www.inpdp.nat.tn",
+      "description": "Autorité de contrôle tunisienne. Publie des guides, des recommandations et les formulaires de déclaration."
+    },
+    {
+      "name": "CNIL — Guides pratiques RGPD",
+      "url": "https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on",
+      "description": "Guides pratiques en français pour la mise en conformité RGPD. Utiles pour les templates Agent 4."
+    },
+    {
+      "name": "CEPD — Lignes directrices",
+      "url": "https://edpb.europa.eu/our-work-tools/general-guidance/guidelines-recommendations-best-practices_fr",
+      "description": "Lignes directrices officielles du Comité Européen de Protection des Données sur l'interprétation du RGPD."
+    },
+    {
+      "name": "ISO 27001:2022 — Résumé des contrôles Annexe A",
+      "url": "https://www.iso.org/standard/82875.html",
+      "description": "Norme ISO payante. Résumés des 93 contrôles disponibles dans la littérature open access."
+    },
+    {
+      "name": "Clauses Contractuelles Types Commission européenne 2021",
+      "url": "https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX%3A32021D0914",
+      "description": "Texte officiel des CCT mis à jour en 2021, applicables pour les transferts UE→pays tiers dont la Tunisie."
+    }
+  ]
+}
