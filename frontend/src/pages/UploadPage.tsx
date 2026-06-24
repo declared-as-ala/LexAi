@@ -501,7 +501,7 @@ export function UploadPage() {
           </aside>
 
           {/* ── Right content ── */}
-          <section className="flex min-w-0 flex-col gap-4">
+          <section className="flex min-w-0 flex-col gap-4 xl:sticky xl:top-6">
             {documents.length === 0 && !loadingWorkspace ? (
               <EmptyWorkspaceState />
             ) : (
@@ -587,8 +587,8 @@ export function UploadPage() {
                       </div>
                     </div>
 
-                    {/* Tab content */}
-                    <div className="p-4 sm:p-6">
+                    {/* Tab content — fixed height, scrolls internally */}
+                    <div className="overflow-y-auto p-4 sm:p-6" style={{ height: "calc(100vh - 380px)" }}>
 
                       {/* Agent 1 */}
                       {activeTab === "agent1" && (
