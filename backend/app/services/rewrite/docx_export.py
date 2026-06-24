@@ -1,4 +1,4 @@
-"""DOCX export for revised contract text (python-docx), legal-style layout."""
+"""DOCX export for revised contract text — structured legal layout."""
 
 from __future__ import annotations
 
@@ -8,45 +8,95 @@ from datetime import datetime, timezone
 from typing import Any
 
 from docx import Document
-from docx.enum.text import WD_LINE_SPACING
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from docx.shared import Cm, Pt
+from docx.shared import Cm, Pt, RGBColor
 
 from app.services.rewrite.export_clean import prepare_export_body
 
-_ARTICLE_LINE = re.compile(r"^\s*(Article\s+\d+[\s\u00a0\-–—].*)$", re.IGNORECASE)
+# ── Heading detection (mirrors pdf_export logic) ────────────────────
+
+def _classify_line(line: str) -> str:
+    s = line.strip()
+    if not s:
+        return "spacer"
+    if re.match(r"^(ARTICLE|CHAPITRE|TITRE|SECTION|CLAUSE)\s+\d+", s, re.IGNORECASE):
+        return "h1"
+    if s.isupper() and 4 <= len(s) <= 90 and not s.startswith(("-", "•", "*")):
+        return "h1"
+    if re.match(r"^(\d+\.)+\d*\s+\S", s) or re.match(r"^[IVXLC]+\.\s+\S", s):
+        return "h2"
+    if re.match(r"^[a-zA-Z]\)\s+\S", s) or re.match(r"^[a-zA-Z]\.\s+\S", s):
+        return "h3"
+    if s.endswith(":") and len(s) <= 80:
+        return "h3"
+    if s.startswith(("- ", "– ", "• ", "* ", "· ")):
+        return "list_item"
+    return "body"
 
 
-def _highlight_paragraph_shading(paragraph, fill_hex: str = "FFF2CC") -> None:
-    """Light yellow background (Word shading)."""
+def _parse_blocks(text: str) -> list[tuple[str, str]]:
+    blocks: list[tuple[str, str]] = []
+    prev_spacer = False
+    for raw_line in text.splitlines():
+        line = raw_line.rstrip()
+        kind = _classify_line(line)
+        if kind == "spacer":
+            if not prev_spacer and blocks:
+                blocks.append(("spacer", ""))
+            prev_spacer = True
+            continue
+        prev_spacer = False
+        s = line.strip()
+        if (
+            kind == "body"
+            and blocks
+            and blocks[-1][0] == "body"
+            and not blocks[-1][1].endswith((".", ":", ";", "?", "!"))
+        ):
+            blocks[-1] = ("body", blocks[-1][1] + " " + s)
+        else:
+            blocks.append((kind, s))
+    return blocks
+
+
+# ── Word field helpers ───────────────────────────────────────────────
+
+def _add_page_number_field(paragraph) -> None:
+    run = paragraph.add_run()
+    r = run._element
+    for tag, ftype, text in [
+        ("w:fldChar", "begin", None),
+        ("w:instrText", None, " PAGE "),
+        ("w:fldChar", "separate", None),
+        ("w:t", None, "1"),
+        ("w:fldChar", "end", None),
+    ]:
+        el = OxmlElement(tag)
+        if ftype:
+            el.set(qn("w:fldCharType"), ftype)
+        if tag == "w:instrText":
+            el.set(qn("xml:space"), "preserve")
+        if text:
+            el.text = text
+        r.append(el)
+
+
+def _shade_paragraph(paragraph, fill_hex: str = "E8F5E9") -> None:
     shd = OxmlElement("w:shd")
     shd.set(qn("w:fill"), fill_hex)
     shd.set(qn("w:val"), "clear")
-    p_pr = paragraph._element.get_or_add_pPr()
-    p_pr.append(shd)
+    paragraph._element.get_or_add_pPr().append(shd)
 
 
-def _add_page_number_field(paragraph) -> None:
-    """Insert Word PAGE field (current page number) in the paragraph's last run."""
-    run = paragraph.add_run()
-    r = run._element
-    fld_begin = OxmlElement("w:fldChar")
-    fld_begin.set(qn("w:fldCharType"), "begin")
-    instr = OxmlElement("w:instrText")
-    instr.set(qn("xml:space"), "preserve")
-    instr.text = " PAGE "
-    fld_sep = OxmlElement("w:fldChar")
-    fld_sep.set(qn("w:fldCharType"), "separate")
-    placeholder = OxmlElement("w:t")
-    placeholder.text = "1"
-    fld_end = OxmlElement("w:fldChar")
-    fld_end.set(qn("w:fldCharType"), "end")
-    r.append(fld_begin)
-    r.append(instr)
-    r.append(fld_sep)
-    r.append(placeholder)
-    r.append(fld_end)
+def _set_font(run, name: str = "Times New Roman", size: float = 12.0,
+              bold: bool = False, color: tuple | None = None) -> None:
+    run.font.name = name
+    run.font.size = Pt(size)
+    run.bold = bold
+    if color:
+        run.font.color.rgb = RGBColor(*color)
 
 
 def _changed_applied_texts(metadata: list[dict[str, Any]] | None) -> set[str]:
@@ -62,6 +112,8 @@ def _changed_applied_texts(metadata: list[dict[str, Any]] | None) -> set[str]:
     return out
 
 
+# ── Document builder ─────────────────────────────────────────────────
+
 def build_docx_bytes(
     display_title: str,
     body_text: str,
@@ -72,82 +124,138 @@ def build_docx_bytes(
 ) -> bytes:
     when = export_date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     doc = Document()
+
+    # Page setup
     section = doc.sections[0]
-    section.top_margin = Cm(2.2)
+    section.top_margin = Cm(2.5)
     section.bottom_margin = Cm(2.5)
-    section.left_margin = Cm(2.2)
+    section.left_margin = Cm(2.8)
     section.right_margin = Cm(2.2)
 
+    # Normal style
     style = doc.styles["Normal"]
     style.font.name = "Times New Roman"
-    style.font.size = Pt(12)
+    style.font.size = Pt(11)
     pf = style.paragraph_format
     pf.line_spacing_rule = WD_LINE_SPACING.MULTIPLE
-    pf.line_spacing = 1.25
-    pf.space_after = Pt(6)
+    pf.line_spacing = 1.35
+    pf.space_after = Pt(4)
 
+    # ── Header ──
     header = section.header
     hp = header.paragraphs[0] if header.paragraphs else header.add_paragraph()
     hp.text = ""
-    ht = hp.add_run((display_title.strip() or "Contrat") + "  ·  " + when)
-    ht.font.name = "Times New Roman"
-    ht.font.size = Pt(11)
-    ht.bold = True
+    hp.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    ht = hp.add_run((display_title.strip() or "Contrat Révisé") + "  ·  " + when)
+    _set_font(ht, size=9, bold=True, color=(120, 90, 10))
 
+    # ── Footer ──
     footer = section.footer
     fp = footer.paragraphs[0] if footer.paragraphs else footer.add_paragraph()
     fp.text = ""
+    fp.alignment = WD_ALIGN_PARAGRAPH.CENTER
     fr = fp.add_run("Page ")
-    fr.font.name = "Times New Roman"
-    fr.font.size = Pt(10)
+    _set_font(fr, size=9, color=(100, 100, 100))
     _add_page_number_field(fp)
+    fr2 = fp.add_run("  —  LexAI · Contrat révisé")
+    _set_font(fr2, size=9, color=(100, 100, 100))
+
+    # ── Title block ──
+    title_text = (display_title.strip() or "Contrat Révisé").upper()
+    tp = doc.add_paragraph()
+    tp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    tp.paragraph_format.space_before = Pt(10)
+    tp.paragraph_format.space_after = Pt(6)
+    tr = tp.add_run(title_text)
+    _set_font(tr, size=15, bold=True, color=(18, 18, 26))
+
+    # Date line
+    dp = doc.add_paragraph()
+    dp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    dp.paragraph_format.space_after = Pt(16)
+    dr = dp.add_run(f"Document exporté le {when} via LexAI")
+    _set_font(dr, size=9, color=(120, 120, 120))
+
+    # Separator paragraph (thin border effect via shading)
+    sep = doc.add_paragraph()
+    sep.paragraph_format.space_after = Pt(12)
+    _shade_paragraph(sep, fill_hex="C9A336")  # gold line
 
     body = prepare_export_body(body_text)
     highlight_set = _changed_applied_texts(revision_metadata)
+    blocks = _parse_blocks(body)
 
-    for block in body.split("\n\n"):
-        stripped = block.strip()
-        if not stripped:
+    for kind, text in blocks:
+        if kind == "spacer":
+            sp = doc.add_paragraph()
+            sp.paragraph_format.space_after = Pt(2)
             continue
-        highlight_block = any(ht and ht in stripped for ht in highlight_set)
-        lines = stripped.splitlines()
-        if len(lines) == 1 and _ARTICLE_LINE.match(lines[0]):
+
+        is_changed = any(hl in text for hl in highlight_set) if highlight_set else False
+
+        if kind == "h1":
             p = doc.add_paragraph()
-            run = p.add_run(lines[0].strip())
-            run.bold = True
-            run.font.name = "Times New Roman"
-            run.font.size = Pt(12)
-            p.paragraph_format.space_before = Pt(10)
+            p.paragraph_format.space_before = Pt(14)
             p.paragraph_format.space_after = Pt(4)
-            if highlight_block:
-                _highlight_paragraph_shading(p)
-            continue
-        para = doc.add_paragraph()
-        for j, line in enumerate(lines):
-            if j > 0:
-                para.add_run().add_break()
-            if _ARTICLE_LINE.match(line):
-                run = para.add_run(line.strip())
-                run.bold = True
-                run.font.name = "Times New Roman"
-                run.font.size = Pt(12)
-            else:
-                run = para.add_run(line)
-                run.font.name = "Times New Roman"
-                run.font.size = Pt(12)
-        if highlight_block:
-            _highlight_paragraph_shading(para)
+            r = p.add_run(text)
+            _set_font(r, size=12, bold=True, color=(18, 18, 26))
+            # Thin gold underline via bottom border
+            ppr = p._element.get_or_add_pPr()
+            pb = OxmlElement("w:pBdr")
+            bot = OxmlElement("w:bottom")
+            bot.set(qn("w:val"), "single")
+            bot.set(qn("w:sz"), "6")
+            bot.set(qn("w:space"), "2")
+            bot.set(qn("w:color"), "C9A336")
+            pb.append(bot)
+            ppr.append(pb)
 
+        elif kind == "h2":
+            p = doc.add_paragraph()
+            p.paragraph_format.space_before = Pt(8)
+            p.paragraph_format.space_after = Pt(3)
+            r = p.add_run(text)
+            _set_font(r, size=11.5, bold=True, color=(30, 50, 100))
+
+        elif kind == "h3":
+            p = doc.add_paragraph()
+            p.paragraph_format.space_before = Pt(5)
+            p.paragraph_format.space_after = Pt(2)
+            p.paragraph_format.left_indent = Cm(0.5)
+            r = p.add_run(text)
+            _set_font(r, size=11, bold=True, color=(50, 70, 130))
+
+        elif kind == "list_item":
+            p = doc.add_paragraph(style="List Bullet")
+            p.paragraph_format.left_indent = Cm(0.8)
+            p.paragraph_format.space_after = Pt(2)
+            # Remove the bullet prefix chars since Word adds its own
+            clean = re.sub(r"^[-–•*·]\s+", "", text)
+            r = p.add_run(clean)
+            _set_font(r, size=11)
+            if is_changed:
+                _shade_paragraph(p)
+
+        else:  # body
+            p = doc.add_paragraph()
+            p.paragraph_format.space_after = Pt(5)
+            p.paragraph_format.first_line_indent = Cm(0.5)
+            r = p.add_run(text)
+            _set_font(r, size=11)
+            if is_changed:
+                _shade_paragraph(p)
+
+    # ── Revision annex ──
     if revision_summary:
         doc.add_page_break()
-        ann = doc.add_heading("Annexe — trace des modifications", level=1)
-        for r in ann.runs:
-            r.font.name = "Times New Roman"
+        ann = doc.add_paragraph()
+        ann.paragraph_format.space_after = Pt(8)
+        ar = ann.add_run("ANNEXE — TRACE DES MODIFICATIONS")
+        _set_font(ar, size=12, bold=True, color=(18, 18, 26))
         for line in revision_summary:
             p = doc.add_paragraph(style="List Bullet")
-            run = p.add_run(line)
-            run.font.name = "Times New Roman"
-            run.font.size = Pt(10)
+            r = p.add_run(line)
+            _set_font(r, size=10)
 
     buf = io.BytesIO()
     doc.save(buf)
@@ -160,7 +268,7 @@ def revision_summary_lines(metadata: list[dict[str, Any]], max_items: int = 50) 
         if not entry.get("changed"):
             continue
         cid = entry.get("clause_id") or "?"
-        lines.append(f"{cid}: texte remplacé ({entry.get('start_char')}-{entry.get('end_char')})")
+        lines.append(f"Clause {cid} : texte remplacé (positions {entry.get('start_char')}–{entry.get('end_char')})")
     if not lines:
         lines.append("Aucune clause modifiée dans cette version.")
     return lines
