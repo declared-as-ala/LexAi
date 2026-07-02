@@ -106,7 +106,15 @@ export function RewriteReviewPanel({
     setExportBusy(kind);
     setError(null);
     try {
-      const sid = finalData?.session_id;
+      // Export requires a finalized rewrite session. If none exists yet, generate
+      // the revised contract first so the buttons "just work" without a manual step.
+      let sid = finalData?.session_id;
+      if (!sid) {
+        const gen = await postRewriteGenerate(documentId);
+        sid = gen.session_id;
+        await onRefresh();
+        await refreshFinal();
+      }
       const blob =
         kind === "docx" ? await downloadRevisedDocx(documentId, sid) : await downloadRevisedPdf(documentId, sid);
       triggerDownload(blob, `revised_${documentId}.${kind === "docx" ? "docx" : "pdf"}`);
