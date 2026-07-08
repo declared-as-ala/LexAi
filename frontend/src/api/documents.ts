@@ -117,6 +117,14 @@ export async function postRewriteKeepOriginal(
   });
 }
 
+export function postRewriteAcceptAll(
+  documentId: number,
+): Promise<{ ok: boolean; accepted_count: number }> {
+  return apiRequest(`/documents/${documentId}/rewrites/accept-all`, {
+    method: "POST",
+  });
+}
+
 export function postRewriteGenerate(documentId: number): Promise<RewriteGenerateResponse> {
   return apiRequest<RewriteGenerateResponse>(`/documents/${documentId}/rewrites/generate`, {
     method: "POST",

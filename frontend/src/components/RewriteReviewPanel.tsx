@@ -5,6 +5,7 @@ import {
   downloadRevisedPdf,
   getRewriteFinal,
   postRewriteAccept,
+  postRewriteAcceptAll,
   postRewriteGenerate,
   postRewriteKeepOriginal,
   postRewriteReject,
@@ -47,6 +48,7 @@ export function RewriteReviewPanel({
 }) {
   const [busy, setBusy] = useState<number | null>(null);
   const [generateBusy, setGenerateBusy] = useState(false);
+  const [acceptAllBusy, setAcceptAllBusy] = useState(false);
   const [exportBusy, setExportBusy] = useState<"docx" | "pdf" | null>(null);
   const [finalData, setFinalData] = useState<RewriteFinalResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -85,6 +87,19 @@ export function RewriteReviewPanel({
       setError(e instanceof Error ? e.message : "Action impossible");
     } finally {
       setBusy(null);
+    }
+  };
+
+  const handleAcceptAll = async () => {
+    setAcceptAllBusy(true);
+    setError(null);
+    try {
+      await postRewriteAcceptAll(documentId);
+      await onRefresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Action impossible");
+    } finally {
+      setAcceptAllBusy(false);
     }
   };
 
@@ -155,6 +170,14 @@ export function RewriteReviewPanel({
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => void handleAcceptAll()}
+            disabled={acceptAllBusy || busy !== null || actionable.length === 0}
+            className="rounded-xl border border-emerald-500/50 bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:opacity-50"
+          >
+            {acceptAllBusy ? "Acceptation…" : "Tout accepter"}
+          </button>
           <button
             type="button"
             onClick={() => void handleGenerate()}

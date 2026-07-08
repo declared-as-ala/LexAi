@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.core.config import STATUS_COMPLETE, STATUS_EVALUATED, UPLOAD_DIR
+from app.core.logging import get_logger
 from app.db.models.document import Document, Extraction
 from app.db.models.nlp_analysis import NLPAnalysis
 from app.db.models.recommendation import Recommendation
@@ -42,6 +43,8 @@ from app.services.rewrite.export_clean import display_title_from_filename
 from app.services.rewrite.pdf_export import build_pdf_bytes
 
 router = APIRouter(prefix="/documents", tags=["rewrites"])
+
+logger = get_logger(__name__)
 
 
 def _get_document_or_404(document_id: int, db: Session) -> Document:
@@ -274,6 +277,67 @@ def accept_rewrite(
     return {"ok": True, "recommendation_id": rec.id, "decision": DECISION_ACCEPTED}
 
 
+@router.post("/{document_id}/rewrites/accept-all")
+def accept_all_rewrites(document_id: int, db: Session = Depends(get_db)) -> dict:
+    """Accept the top-priority rewrite for every clause in one action.
+
+    For each clause, the highest-priority recommendation is marked accepted and any
+    other recommendations for the same clause are rejected (mirrors single-accept).
+    """
+    _get_document_or_404(document_id, db)
+    sess = _get_or_create_draft_session(db, document_id)
+    if sess.status != REWRITE_STATUS_DRAFT:
+        raise HTTPException(status_code=409, detail={"code": "session_locked", "message": "Finalize a new draft first"})
+
+    recs = _list_recommendations(db, document_id)  # ordered by priority asc, id asc
+    rows_by_rec = {
+        r.recommendation_id: r
+        for r in db.query(RewriteClauseDecision)
+        .filter(RewriteClauseDecision.session_id == sess.id)
+        .all()
+    }
+
+    accepted_ids: list[int] = []
+    rejected_ids: list[int] = []
+    seen_clauses: set[str] = set()
+
+    for rec in recs:
+        cid = rec.clause_id or ""
+        # Skip recommendations not tied to a clause or without an actual rewrite
+        if not cid or not (rec.rewritten_clause or "").strip():
+            continue
+
+        row = rows_by_rec.get(rec.id)
+        if not row:
+            row = RewriteClauseDecision(
+                session_id=sess.id,
+                recommendation_id=rec.id,
+                clause_id=rec.clause_id,
+                decision=DECISION_PENDING,
+            )
+            db.add(row)
+            db.flush()
+            rows_by_rec[rec.id] = row
+
+        if cid in seen_clauses:
+            # A higher-priority rec for this clause was already accepted
+            row.decision = DECISION_REJECTED
+            rejected_ids.append(rec.id)
+        else:
+            row.decision = DECISION_ACCEPTED
+            row.clause_id = rec.clause_id
+            seen_clauses.add(cid)
+            accepted_ids.append(rec.id)
+
+    db.commit()
+    return {
+        "ok": True,
+        "accepted_recommendation_ids": accepted_ids,
+        "rejected_recommendation_ids": rejected_ids,
+        "accepted_count": len(accepted_ids),
+    }
+
+
 @router.post("/{document_id}/rewrites/{clause_id}/reject")
 def reject_rewrite(
     document_id: int,
@@ -456,21 +520,32 @@ def _run_export(
         if doc.finished_at
         else datetime.now(timezone.utc).strftime("%Y-%m-%d")
     )
-    if kind == EXPORT_KIND_DOCX:
-        summary = revision_summary_lines(meta_list)
-        blob = build_docx_bytes(
-            display_title,
-            sess.final_text,
-            summary,
-            export_date=export_date,
-            revision_metadata=meta_list,
-        )
-        ext = "docx"
-    elif kind == EXPORT_KIND_PDF:
-        blob = build_pdf_bytes(display_title, sess.final_text, export_date=export_date)
-        ext = "pdf"
-    else:
-        raise HTTPException(status_code=400, detail={"code": "bad_kind", "message": f"Unknown export kind {kind}"})
+    try:
+        if kind == EXPORT_KIND_DOCX:
+            summary = revision_summary_lines(meta_list)
+            blob = build_docx_bytes(
+                display_title,
+                sess.final_text,
+                summary,
+                export_date=export_date,
+                revision_metadata=meta_list,
+            )
+            ext = "docx"
+        elif kind == EXPORT_KIND_PDF:
+            blob = build_pdf_bytes(display_title, sess.final_text, export_date=export_date)
+            ext = "pdf"
+        else:
+            raise HTTPException(status_code=400, detail={"code": "bad_kind", "message": f"Unknown export kind {kind}"})
+    except HTTPException:
+        raise
+    except Exception as exc:  # surface the real cause instead of an opaque 500
+        logger.exception("export_generation_failed", extra={"extra": {
+            "document_id": doc.id, "session_id": session_id, "kind": kind,
+        }})
+        raise HTTPException(
+            status_code=500,
+            detail={"code": "export_failed", "message": f"Échec de la génération {kind.upper()} : {exc}"},
+        ) from exc
 
     out_dir = _export_dir(doc.id, sess.id)
     out_dir.mkdir(parents=True, exist_ok=True)

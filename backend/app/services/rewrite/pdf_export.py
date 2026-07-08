@@ -27,26 +27,33 @@ _BOLD_FONT_PATH_CANDIDATES = (
 )
 
 
-def _load_body_font() -> fitz.Font:
+def _load_body_font() -> fitz.Font | None:
+    """Return an embeddable body font, or None if none is available."""
     try:
         return fitz.Font("figo")
     except Exception:
         pass
     for path in _FONT_PATH_CANDIDATES:
-        if Path(path).is_file():
-            return fitz.Font(fontfile=path)
-    raise RuntimeError("No body font found. Install pymupdf-fonts or DejaVu Sans.")
+        try:
+            if Path(path).is_file():
+                return fitz.Font(fontfile=path)
+        except Exception:
+            continue
+    return None
 
 
-def _load_bold_font(body: fitz.Font) -> fitz.Font:
+def _load_bold_font(body: fitz.Font | None) -> fitz.Font | None:
     try:
         return fitz.Font("figbo")
     except Exception:
         pass
     for path in _BOLD_FONT_PATH_CANDIDATES:
-        if Path(path).is_file():
-            return fitz.Font(fontfile=path)
-    return body  # fall back to body font if no bold available
+        try:
+            if Path(path).is_file():
+                return fitz.Font(fontfile=path)
+        except Exception:
+            continue
+    return body  # fall back to body font (may be None → built-in font used)
 
 
 # ── Block classification ─────────────────────────────────────────────
@@ -103,11 +110,37 @@ BOTTOM = PAGE_H - 48.0  # body ends here (above footer)
 FNAME_REG = "LexR"
 FNAME_BLD = "LexB"
 
+# Built-in PyMuPDF Base-14 fonts (need no font file, always available).
+# WinAnsi/Latin-1 encoding covers French accents (é è à ç ù …).
+_BUILTIN_REG = "helv"
+_BUILTIN_BLD = "hebo"
 
-def _new_page(doc: fitz.Document, body_buf: bytes, bold_buf: bytes) -> tuple[fitz.Page, float]:
+
+def _resolve_fonts() -> tuple[str, str, bytes | None, bytes | None]:
+    """
+    Decide which fonts to use. Returns (reg_name, bold_name, reg_buf, bold_buf).
+    When a buffer is None, the corresponding name is a built-in Base-14 font that
+    does not need embedding — this guarantees PDF export never fails on missing fonts.
+    """
+    body = _load_body_font()
+    if body is not None:
+        bold = _load_bold_font(body) or body
+        return FNAME_REG, FNAME_BLD, body.buffer, bold.buffer
+    return _BUILTIN_REG, _BUILTIN_BLD, None, None
+
+
+def _new_page(
+    doc: fitz.Document,
+    reg_name: str,
+    bold_name: str,
+    reg_buf: bytes | None,
+    bold_buf: bytes | None,
+) -> tuple[fitz.Page, float]:
     page = doc.new_page(width=PAGE_W, height=PAGE_H)
-    page.insert_font(fontname=FNAME_REG, fontbuffer=body_buf)
-    page.insert_font(fontname=FNAME_BLD, fontbuffer=bold_buf)
+    if reg_buf is not None:
+        page.insert_font(fontname=reg_name, fontbuffer=reg_buf)
+    if bold_buf is not None:
+        page.insert_font(fontname=bold_name, fontbuffer=bold_buf)
     return page, TOP
 
 
@@ -138,28 +171,25 @@ def build_pdf_bytes(
     when = export_date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     body = prepare_export_body(body_text)
 
-    body_font = _load_body_font()
-    bold_font = _load_bold_font(body_font)
-    body_buf = body_font.buffer
-    bold_buf = bold_font.buffer
+    reg_name, bold_name, reg_buf, bold_buf = _resolve_fonts()
 
     doc = fitz.open()
     all_pages: list[fitz.Page] = []
 
-    page, y = _new_page(doc, body_buf, bold_buf)
+    page, y = _new_page(doc, reg_name, bold_name, reg_buf, bold_buf)
     all_pages.append(page)
 
     def need_break(needed: float) -> None:
         nonlocal page, y
         if y + needed > BOTTOM:
-            page, y = _new_page(doc, body_buf, bold_buf)
+            page, y = _new_page(doc, reg_name, bold_name, reg_buf, bold_buf)
             all_pages.append(page)
 
     # ── Document title ──
     need_break(40)
-    y = _draw(page, y, (display_title or "Contrat").upper(), FNAME_BLD, 15, (0.05, 0.05, 0.10))
+    y = _draw(page, y, (display_title or "Contrat").upper(), bold_name, 15, (0.05, 0.05, 0.10))
     y += 4
-    y = _draw(page, y, f"Exporté le {when}  ·  LexAI", FNAME_REG, 9, (0.50, 0.50, 0.50))
+    y = _draw(page, y, f"Exporté le {when}  ·  LexAI", reg_name, 9, (0.50, 0.50, 0.50))
     y += 18
 
     # ── Body blocks ──
@@ -173,31 +203,31 @@ def build_pdf_bytes(
         if kind == "h1":
             y += 12
             need_break(30)
-            y = _draw(page, y, text, FNAME_BLD, 12.5, (0.05, 0.05, 0.10))
+            y = _draw(page, y, text, bold_name, 12.5, (0.05, 0.05, 0.10))
             y += 5
 
         elif kind == "h2":
             y += 7
             need_break(24)
-            y = _draw(page, y, text, FNAME_BLD, 11.0, (0.10, 0.20, 0.42), indent=6)
+            y = _draw(page, y, text, bold_name, 11.0, (0.10, 0.20, 0.42), indent=6)
             y += 3
 
         elif kind == "h3":
             y += 5
             need_break(20)
-            y = _draw(page, y, text, FNAME_BLD, 10.5, (0.20, 0.28, 0.50), indent=12)
+            y = _draw(page, y, text, bold_name, 10.5, (0.20, 0.28, 0.50), indent=12)
             y += 2
 
         elif kind == "list":
             clean = re.sub(r"^[-–•*·]\s*", "", text)
             need_break(18)
-            y = _draw(page, y, "• " + clean, FNAME_REG, 10.5, (0.12, 0.12, 0.12), indent=16)
+            y = _draw(page, y, "• " + clean, reg_name, 10.5, (0.12, 0.12, 0.12), indent=16)
             y += 2
 
         else:  # body
             lines_est = max(1, len(text) // 85 + 1)
             need_break(lines_est * 10.5 * 1.45 + 8)
-            y = _draw(page, y, text, FNAME_REG, 10.5, (0.10, 0.10, 0.10))
+            y = _draw(page, y, text, reg_name, 10.5, (0.10, 0.10, 0.10))
             y += 5
 
     # ── Headers and footers ──
@@ -208,14 +238,14 @@ def build_pdf_bytes(
         pg.insert_textbox(
             fitz.Rect(MX, 15, PAGE_W - MX, 48),
             f"{title_str}  ·  {when}",
-            fontname=FNAME_BLD, fontsize=9,
+            fontname=bold_name, fontsize=9,
             color=(0.40, 0.30, 0.05), align=0,
         )
         # Footer line
         pg.insert_textbox(
             fitz.Rect(MX, PAGE_H - 40, PAGE_W - MX, PAGE_H - 12),
             f"Page {i + 1} / {n}  —  LexAI · Contrat révisé",
-            fontname=FNAME_REG, fontsize=8,
+            fontname=reg_name, fontsize=8,
             color=(0.50, 0.50, 0.50), align=1,
         )
 
