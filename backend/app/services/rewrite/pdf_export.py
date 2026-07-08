@@ -231,9 +231,18 @@ def build_pdf_bytes(
             y += 5
 
     # ── Headers and footers ──
-    n = len(all_pages)
+    # Re-load each page fresh from the document (doc[i]). Page objects created
+    # earlier get orphaned once new pages are added (their parent weakref becomes
+    # None), which crashes insert_textbox on multi-page documents. On reload we
+    # must also re-embed the custom fonts into that page's resources.
+    n = doc.page_count
     title_str = (display_title or "Contrat").strip()
-    for i, pg in enumerate(all_pages):
+    for i in range(n):
+        pg = doc[i]
+        if reg_buf is not None:
+            pg.insert_font(fontname=reg_name, fontbuffer=reg_buf)
+        if bold_buf is not None:
+            pg.insert_font(fontname=bold_name, fontbuffer=bold_buf)
         # Header line
         pg.insert_textbox(
             fitz.Rect(MX, 15, PAGE_W - MX, 48),
